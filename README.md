@@ -5,10 +5,10 @@
 * Coding style reference: https://github.com/lowRISC/style-guides/blob/master/VerilogCodingStyle.md
 
 * Project 1 progress & task distribution:
-  - [X] Part 1 - Denis
-  - [ ] Part 2a - 
-  - [ ] Part 2b - 
-  - [ ] Part 2c - 
-  - [ ] Part 3 - 
-  - [ ] Part 4 - 
-  - [ ] Report - 
+  - Part 1 :heavy_check_mark: - Denis
+  - Part 2a - 
+  - Part 2b - 
+  - Part 2c - 
+  - Part 3 - 
+  - Part 4 - 
+  - Report - 
