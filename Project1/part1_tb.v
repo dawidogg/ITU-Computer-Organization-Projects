@@ -43,13 +43,13 @@ module register_tb;
     displayHead();
     funsel = 2'b00; #5;
     funsel = 2'b11;
-    repeat(32) #5 enable = ~enable;
+    repeat(34) #5 enable = ~enable;
 
     $display("\nDecrement test");
     displayHead();
     funsel = 2'b00; #5;
     funsel = 2'b10;
-    repeat(32) #5 enable = ~enable;
+    repeat(34) #5 enable = ~enable;
   end
 
 endmodule
