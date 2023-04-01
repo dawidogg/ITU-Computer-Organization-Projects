@@ -26,7 +26,7 @@ module register_tb;
     $monitor("%6b %6b %6b %6b", enable, funsel, input_4, output_4);
     
     $display("Load & clear test:");
-    displayHead();
+    displayHead;
     enable = 1'b1;
     funsel = 2'b01; input_4 = 4'b1111; #5; 
     funsel = 2'b00; #5; 
@@ -40,13 +40,13 @@ module register_tb;
     funsel = 2'b00; #5; 
     
     $display("\nIncrement test");
-    displayHead();
+    displayHead;
     funsel = 2'b00; #5;
     funsel = 2'b11;
     repeat(34) #5 enable = ~enable;
 
     $display("\nDecrement test");
-    displayHead();
+    displayHead;
     funsel = 2'b00; #5;
     funsel = 2'b10;
     repeat(34) #5 enable = ~enable;
