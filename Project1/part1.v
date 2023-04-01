@@ -10,7 +10,7 @@ parameter NBits = 16
 reg[NBits-1:0] data;
 assign q = data;
 
-always @(funsel or i or e) begin
+always @(*) begin
   if (e)
     case (funsel)
       2'b00: data = {NBits{1'b0}};  // Clear
