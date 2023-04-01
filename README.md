@@ -8,7 +8,7 @@
   - Part 1 :heavy_check_mark: - Denis
   - Part 2a :heavy_check_mark: - Denis
   - Part 2b - Mustafa 
-  - Part 2c - 
+  - Part 2c - Denis
   - Part 3 - 
   - Part 4 - 
   - Report - 
