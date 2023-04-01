@@ -21,52 +21,33 @@
 
 
 module part2b_tb();
-    reg[2:0] O1Sel, O2Sel;
-    reg[1:0] FunSel;
-    reg[3:0] RSel, TSel;
-    wire[7:0] i,O1, O2;
-    //i = 8'b00000100;
-    part2b test_module(O1Sel, O2Sel, FunSel, RSel, TSel, 8'b00000100, O1, O2);
+    reg[2:0] O1Sel = 3'b100, O2Sel = 3'b000; //R1 and T1
+    reg[1:0] FunSel = 2'b11; // increment
+    reg[3:0] RSel = 4'b1000, TSel = 4'b1000; //R1 and T1
+    reg[7:0] i = 8'b00010100;
+    wire[7:0] O1, O2;
+    RF test_module(O1Sel, O2Sel, FunSel, RSel, TSel, i, O1, O2);
 
-    task displayHead;
-        $display("%6s %6s %6s %6s %6s", "Enable", "L'/H", "FunSel","Input","Output");
-    endtask
-    
-    task displayLine;
-        $display({50{"-"}});
-    endtask
-        
+    reg[0:0]clock = 1'b1;
+ 
     initial begin
-        $display("TEST\n");
-        O1Sel = 3'b111; O2Sel = 3'b000; // o1 is r4 initially and o2 is t1
-        FunSel = 2'b11;//increment
-        RSel = 4'b0001; TSel = 4'b0000;//only R4 and T1 is enabled
-        $monitor("%6s &6s %6s &6s &6s %6s %6s","O1Sel", "O2Sel", "FunSel", "RSel", "TSel", "O1","O2");
+
+    // test O1/O2 Switches
+    //#50;
+    FunSel = 2'b00;#50;
+    FunSel = 2'b01;#50;
+    FunSel = 2'b00;#50;
+    FunSel = 2'b01;#50;
+    FunSel = 2'b11;#50;
+    FunSel = 2'b11;#50;
     
-        RSel = 4'b0000; #62.5; 
-        RSel = 4'b0001; #62.5; 
-        RSel = 4'b0010; #62.5;
-        RSel = 4'b0011; #62.5; 
-        
-        RSel = 4'b0000; #62.5; 
-        RSel = 4'b0001; #62.5; 
-        RSel = 4'b0010; #62.5;
-        RSel = 4'b0011; #62.5;
-        
-        //switching O1 to T1
-        O1Sel = 3'b000;#62.5
-        
-        RSel = 4'b0000; #62.5; 
-        RSel = 4'b0001; #62.5; 
-        RSel = 4'b0010; #62.5;
-        RSel = 4'b0011; #62.5; 
-        
-        RSel = 4'b0000; #62.5; 
-        RSel = 4'b0001; #62.5; 
-        RSel = 4'b0010; #62.5;
-        RSel = 4'b0011; #62.5;
-        $finish;
     
+    repeat(10) #25 clock = ~clock;
+
+    // test register switches
+    
+
+ 
     end
 
 endmodule
