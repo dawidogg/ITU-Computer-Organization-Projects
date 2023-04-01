@@ -6,8 +6,8 @@
 
 * Project 1 progress & task distribution:
   - Part 1 :heavy_check_mark: - Denis
-  - Part 2a - Denis
-  - Part 2b - 
+  - Part 2a :heavy_check_mark: - Denis
+  - Part 2b - Mustafa 
   - Part 2c - 
   - Part 3 - 
   - Part 4 - 
