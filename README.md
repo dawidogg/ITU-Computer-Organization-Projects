@@ -8,7 +8,7 @@
   - Part 1 :heavy_check_mark: - Denis
   - Part 2a :heavy_check_mark: - Denis
   - Part 2b (test bench left) - Mustafa 
-  - Part 2c - Denis
+  - Part 2c :heavy_check_mark: - Denis
   - Part 3 - Matay
   - Part 4 - 
   - Report - 
