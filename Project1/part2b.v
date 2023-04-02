@@ -52,29 +52,29 @@ module RF(
 
 
   always @(*) begin
-    case (O1Sel)
-      3'b000:  O1out <= T1out;
-      3'b001:  O1out <= T2out;
-      3'b010:  O1out <= T3out;
-      3'b011:  O1out <= T4out;
-      3'b100:  O1out <= R1out;
-      3'b101:  O1out <= R2out;
-      3'b110:  O1out <= R3out;
-      3'b111:  O1out <= R4out;
-    endcase
-    case (O2Sel)
-      3'b000:  O2out <= T1out;
-      3'b001:  O2out <= T2out;
-      3'b010:  O2out <= T3out;
-      3'b011:  O2out <= T4out;
-      3'b100:  O2out <= R1out;
-      3'b101:  O2out <= R2out;
-      3'b110:  O2out <= R3out;
-      3'b111:  O2out <= R4out;
-    endcase
-    
     {R1e, R2e, R3e, R4e} = RSel;
     {T1e, T2e, T3e, T4e} = TSel;
- 
+    
+    case (O1Sel)
+      3'b000:  O1out = T1out;
+      3'b001:  O1out = T2out;
+      3'b010:  O1out = T3out;
+      3'b011:  O1out = T4out;
+      3'b100:  O1out = R1out;
+      3'b101:  O1out = R2out;
+      3'b110:  O1out = R3out;
+      3'b111:  O1out = R4out;
+    endcase
+    case (O2Sel)
+      3'b000:  O2out = T1out;
+      3'b001:  O2out = T2out;
+      3'b010:  O2out = T3out;
+      3'b011:  O2out = T4out;
+      3'b100:  O2out = R1out;
+      3'b101:  O2out = R2out;
+      3'b110:  O2out = R3out;
+      3'b111:  O2out = R4out;
+    endcase
+
     end
 endmodule
