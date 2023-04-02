@@ -29,16 +29,15 @@ module RF(
   input[3:0]          TSel, 
   input[7:0]          i,
 
-  output[7:0]         O1,
-  output[7:0]         O2
+  output reg[7:0]     O1,
+  output reg[7:0]     O2
 );
 
   wire[7:0] R1out, R2out, R3out, R4out;
   wire[7:0] T1out, T2out, T3out, T4out;
   reg[0:0] R1e, R2e, R3e, R4e;
   reg[0:0] T1e, T2e, T3e, T4e;
-  reg[7:0] O1out, O2out;
-  assign O1 = O1out; assign O2 = O2out;
+
 
   register #(.NBits(8)) R1(.funsel(FunSel), .e(R1e), .i(i), .q(R1out));
   register #(.NBits(8)) R2(.funsel(FunSel), .e(R2e), .i(i), .q(R2out));
@@ -56,24 +55,24 @@ module RF(
     {T1e, T2e, T3e, T4e} = TSel;
     
     case (O1Sel)
-      3'b000:  O1out = T1out;
-      3'b001:  O1out = T2out;
-      3'b010:  O1out = T3out;
-      3'b011:  O1out = T4out;
-      3'b100:  O1out = R1out;
-      3'b101:  O1out = R2out;
-      3'b110:  O1out = R3out;
-      3'b111:  O1out = R4out;
+      3'b000:  O1 = T1out;
+      3'b001:  O1 = T2out;
+      3'b010:  O1 = T3out;
+      3'b011:  O1 = T4out;
+      3'b100:  O1 = R1out;
+      3'b101:  O1 = R2out;
+      3'b110:  O1 = R3out;
+      3'b111:  O1 = R4out;
     endcase
     case (O2Sel)
-      3'b000:  O2out = T1out;
-      3'b001:  O2out = T2out;
-      3'b010:  O2out = T3out;
-      3'b011:  O2out = T4out;
-      3'b100:  O2out = R1out;
-      3'b101:  O2out = R2out;
-      3'b110:  O2out = R3out;
-      3'b111:  O2out = R4out;
+      3'b000:  O2 = T1out;
+      3'b001:  O2 = T2out;
+      3'b010:  O2 = T3out;
+      3'b011:  O2 = T4out;
+      3'b100:  O2 = R1out;
+      3'b101:  O2 = R2out;
+      3'b110:  O2 = R3out;
+      3'b111:  O2 = R4out;
     endcase
 
     end
