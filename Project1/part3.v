@@ -39,25 +39,32 @@ always @(posedge CLK) begin
       out = ~B;
     end
     4'b0100:begin // A + B
-      {in[2], out} = A + B;
+      {in[2], out} = {A[7], A} + {B[7], B};
       if((A[7] == B[7]) && (B[7] != out[7])) // Check overflow
         in[0] = 1'b1;
-      else
+      else 
         in[0] = 1'b0;
     end
     4'b0101:begin // A - B
-      {in[2], out} = A - B;
+      {in[2], out} = {A[7], A} - {B[7], B};
       if((A[7] != B[7]) && (B[7] == out[7])) // Check overflow
-        in[0] = 1'b1;
+        in[0] = 1'b1; 
       else 
         in[0] = 1'b0;
     end
-    4'b0110:begin // Compare A, B (same as A - B?)
-      {in[2], out} = A - B;
+    4'b0110:begin // Compare A, B
+      {in[2], out} = {A[7], A} - {B[7], B};
       if((A[7] != B[7]) && (B[7] == out[7])) // Check overflow
-        in[0] = 1'b1;
+        in[0] = 1'b1; 
       else 
         in[0] = 1'b0;
+      // Comparison
+      if(out == 8'h00) 
+        out = 8'h00;
+      else if(out[7] == in[0]) 
+        out = A;
+      else
+        out = 8'h00;
     end
     4'b0111:begin // A AND B
       out = A & B;
@@ -80,23 +87,23 @@ always @(posedge CLK) begin
     4'b1101:begin // ASL A
       out = {A[6:0], 1'b0};
       if(A[7] != A[6]) // Check overflow
-        in[0] = 1'b1;
-      else
+        in[0] = 1'b1; 
+      else 
         in[0] = 1'b0;
     end
     4'b1110:begin // ASR A
       out = {A[7], A[7:1]};
     end
     4'b1111:begin // CSR A
-      out = {in[1], A[7:1]}; in[1] = A[0];
+      out = {in[2], A[7:1]}; in[2] = A[0];
     end
   endcase
   
-  if(out == 8'h00) // Check zero output
+  if(out == 8'b0) // Check zero output
     in[3] = 1'b1;
   else
     in[3] = 1'b0;
-  
+    
   if(out[7] == 1'b1 && FunSel != 4'hE) // Check negative output
     in[1] = 1'b1;
   else
