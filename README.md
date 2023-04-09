@@ -9,6 +9,6 @@
   - Part 2a :heavy_check_mark: - Denis
   - Part 2b :heavy_check_mark: - Mustafa 
   - Part 2c :heavy_check_mark: - Denis
-  - Part 3 - Matay
-  - Part 4 - 
+  - Part 3 :heavy_check_mark: - Matay
+  - Part 4 :hourglass: - Mustafa
   - Report - 
