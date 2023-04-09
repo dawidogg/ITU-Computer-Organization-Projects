@@ -21,12 +21,12 @@ module alu_tb;
   begin
     funsel = 4'h0;
     repeat(15) begin
-      #10; funsel = funsel + 1;
+      #20; funsel = funsel + 1;
     end
   end
   endtask
  
-  always #5 clk = ~clk;
+  always #10 clk = ~clk;
   
   initial begin
     clk = 1'b0;
@@ -34,13 +34,23 @@ module alu_tb;
     // Test each function
     a = 8'h05; b = 8'h02;
     loopFunSel;
-    
+      
     // Test overflow
-    #10;
-    a = 8'h7F; b = 8'h01;
     funsel = 4'h4;
-    #20
-    if(zcno[0])
-        $display("\nOverflow detected.");
+    a = 8'h7F; b = 8'h01; #20;
+      
+    // Compare A, B
+    funsel = 4'h6;
+    a = -8'h01; b = -8'h01; #20;
+    a = -8'h80; b = 8'h7F; #20;
+    a = 8'h7F; b = -8'h80; #20;
+    a = 8'h05; b = 8'h05; #20;
+      
+    // Circular Shift
+    funsel = 4'hF;
+    a = 8'h40; #20;
+    repeat(9) begin
+      a = outalu; #20; 
+    end
   end
 endmodule
