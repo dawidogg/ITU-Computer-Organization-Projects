@@ -2,13 +2,14 @@
 
 module part2c_tb;
   integer seed = 315001;
-  reg clk = 1'b0;
+  reg clk;
   reg[7:0] i;
   reg[1:0] out_a_sel, out_b_sel, funsel;
   reg[3:0] r_sel;
   wire[7:0] out_a, out_b;
 
   ARF uut(
+    .clk(clk),
     .i(i),
     .out_a_sel(out_a_sel),
     .out_b_sel(out_b_sel),
@@ -27,7 +28,7 @@ module part2c_tb;
     $write("A:%6h %6b %6b ", i, funsel, r_sel);
     out_a_sel = 2'b00;
     repeat(4) begin
-      #5;
+      #10;
       $write("%6h ", out_a);
       out_a_sel = out_a_sel + 1;
     end
@@ -40,7 +41,7 @@ module part2c_tb;
     $write("B:%6h %6b %6b ", i, funsel, r_sel);
     out_b_sel = 2'b00;
     repeat(4) begin
-      #5;
+      #10;
       $write("%6h ", out_b);
       out_b_sel = out_b_sel + 1;
     end
@@ -61,30 +62,32 @@ module part2c_tb;
   end
   endtask
 
+  always #5 clk = ~clk;
+
   initial begin
-    //$dumpfile("dump.vcd"); $dumpvars;
+    $dumpfile("dump.vcd"); $dumpvars;
     $display("Testing adress register file (ARF)");
-    
+    clk = 0;
+
     $display("\nClear test");
     funsel = 2'b00;
     r_sel = 4'b1111;
-    #5;
-    r_sel = 4'b0000;
+    #10;
     showAll;
 
     $display("\nLoad with random numbers test:");
     funsel = 2'b01;
     
-    r_sel = 4'b1000; i = $urandom(seed)%(256); #5;
+    r_sel = 4'b1000; i = $urandom(seed)%(256); #10;
     showAll;
 
-    r_sel = 4'b0100; i = $urandom(seed)%(256); #5;
+    r_sel = 4'b0100; i = $urandom(seed)%(256); #10;
     showAll;
     
-    r_sel = 4'b0010; i = $urandom(seed)%(256); #5;
+    r_sel = 4'b0010; i = $urandom(seed)%(256); #10;
     showAll;
     
-    r_sel = 4'b0001; i = $urandom(seed)%(256); #5;
+    r_sel = 4'b0001; i = $urandom(seed)%(256); #10;
     showAll;
 
     $display("\nIncrement with random numbers test:");
@@ -92,8 +95,8 @@ module part2c_tb;
     funsel = 2'b11;
     displayHead;
     repeat(15) begin
-      r_sel = 4'b0000; #5;
-      r_sel = $urandom(seed)%(64); #5;
+      r_sel = $urandom(seed)%(64); #10;
+      r_sel = 0;
       showRegistersThroughA;
     end
 
@@ -102,10 +105,12 @@ module part2c_tb;
     funsel = 2'b10;
     displayHead;
     repeat(15) begin
-      r_sel = 4'b0000; #5;
-      r_sel = $urandom(seed)%(64); #5;
+      r_sel = $urandom(seed)%(64); #10;
+      r_sel = 0;
       showRegistersThroughB;
     end
+
+    $finish;
   end
 
 endmodule

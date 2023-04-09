@@ -1,6 +1,7 @@
 `include "part1.v"
 
 module ARF(
+  input           clk,
   input[7:0]      i,
   input[1:0]      out_b_sel,
   input[1:0]      out_a_sel,
@@ -10,29 +11,36 @@ module ARF(
   output reg[7:0] out_b
 );
 
+  reg dclk;
+
   register #(.NBits(8)) PC (
+    .clk    (dclk),
     .funsel (funsel),
     .i      (i     )
   );
 
   register #(.NBits(8)) AR (
+    .clk    (dclk),
     .funsel (funsel),
     .i      (i     )
   );
 
   register #(.NBits(8)) SP (
+    .clk    (dclk),
     .funsel (funsel),
     .i      (i     )
   );
 
   register #(.NBits(8)) PC_past (
+    .clk    (dclk),
     .funsel (funsel),
     .i      (i     )
   );
 
   assign {AR.e,  SP.e, PC_past.e, PC.e} = r_sel;
 
-  always @(*) begin
+  always @(posedge clk) begin
+    dclk = 0;
     case (out_a_sel)
       2'b00: out_a = AR.q;
       2'b01: out_a = SP.q;
@@ -46,6 +54,9 @@ module ARF(
       2'b10: out_b = PC_past.q;
       2'b11: out_b = PC.q;
     endcase
+
+    #1;
+    dclk = 1;
   end
 
 endmodule
