@@ -1,11 +1,12 @@
 `timescale 1ns / 1ps
 
-module mux1to2 (input [1:0] sel, 
-                input [3:0] I0,
-                input [3:0] I1,
-                output reg[3:0] out);
+module mux1to2 (input [0:0] sel, 
+                input [7:0] I0,
+                input [7:0] I1,
+                input [0:0] clk,
+                output reg[7:0] out);
                 
-    always @ (*) begin
+    always @ (posedge clk) begin
         case (sel)
             3'b00: out = I0;
             3'b01: out = I1;
@@ -14,13 +15,14 @@ module mux1to2 (input [1:0] sel,
 endmodule
 
 module mux2to4 (input [1:0] sel, 
-                input [3:0] I0,
-                input [3:0] I1,
-                input [3:0] I2,
-                input [3:0] I3,
-                output reg[3:0] out);
+                input [7:0] I0,
+                input [7:0] I1,
+                input [7:0] I2,
+                input [7:0] I3,
+                input [0:0] clk,
+                output reg[7:0] out);
                 
-    always @ (*) begin
+    always @ (posedge clk) begin
         case (sel)
             3'b00: out = I0;
             3'b01: out = I1;
@@ -82,7 +84,7 @@ module ALUSystem(
     wire[7:0] ALU_A;
     wire[7:0] ALU_B;
     wire[7:0] OutALU;
-    wire[7:0] ALU_ZCNO;
+    wire[3:0] ALU_ZCNO;
     //MUXB
     wire[7:0] B_I0;
     wire[7:0] B_I1;
@@ -104,7 +106,7 @@ module ALUSystem(
     wire[15:0] IR_out;
     //out
     //just a placeholder
-    wire[7:0] out;
+    //wire[7:0] out;
 
     //assignments between outputs and inputs
     // categorization is for inputs
@@ -121,10 +123,10 @@ module ALUSystem(
     assign ARF_i = MUXB_out;
     //IR
     assign IR_i = MEM_out;
-    assign IR_out_low = IR_out[0:7];
-    assign IR_out_high = IR_out[8:15];
+    assign IR_out_low = IR_out[7:0]; //maybe IR_out[0:7]
+    assign IR_out_high = IR_out[15:8]; // maybe IR_out[8:15]
     //System
-    assign out = IR_out_high; //probably not needed
+    //assign out = IR_out_high; //probably not needed
     //MUXA
     assign A_I0 = OutALU;
     assign A_I1 = MEM_out;
@@ -146,8 +148,8 @@ module ALUSystem(
         .I1(A_I1),
         .I2(A_I2),
         .I3(A_I3),
-        .out(MUXA_out),
-        .clk(Clock)
+        .clk(Clock),
+        .out(MUXA_out)
     );
     
     RF _RF(
@@ -166,6 +168,7 @@ module ALUSystem(
         .sel(MuxCSel),
         .I0(C_I0),
         .I1(C_I1),
+        .clk(Clock),
         .out(MUXC_out)
     );
     
@@ -182,9 +185,9 @@ module ALUSystem(
         .A(ALU_A),
         .B(ALU_B),
         .FunSel(ALU_FunSel),
-        .OutALU(ALU_FunSel),
-        .ZCNO(ALU_ZCNO),
         .CLK(Clock),
+        .OutALU(OutALU),
+        .ZCNO(ALU_ZCNO)
     );
     
     ARF _ARF(
@@ -203,12 +206,11 @@ module ALUSystem(
         .data(MEM_data),
         .wr(Mem_WR),
         .cs(Mem_CS),
-        .clock(),
         .o(MEM_out),
-        .clk(Clock)
+        .clock(Clock)
     );
     
-    IR _IR(
+    IR_16_bit _IR(
       .i_half (IR_i),
       .funsel (IR_Funsel),
       .e      (IR_Enable),
