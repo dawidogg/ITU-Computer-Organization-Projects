@@ -28,6 +28,7 @@ module RF(
   input[3:0]          RSel, 
   input[3:0]          TSel, 
   input[7:0]          i,
+  input[0:0]          clk,
 
   output reg[7:0]     O1,
   output reg[7:0]     O2
@@ -39,18 +40,18 @@ module RF(
   reg[0:0] T1e, T2e, T3e, T4e;
 
 
-  register #(.NBits(8)) R1(.funsel(FunSel), .e(R1e), .i(i), .q(R1out));
-  register #(.NBits(8)) R2(.funsel(FunSel), .e(R2e), .i(i), .q(R2out));
-  register #(.NBits(8)) R3(.funsel(FunSel), .e(R3e), .i(i), .q(R3out));
-  register #(.NBits(8)) R4(.funsel(FunSel), .e(R4e), .i(i), .q(R4out));
-  register #(.NBits(8)) T1(.funsel(FunSel), .e(T1e), .i(i), .q(T1out));
-  register #(.NBits(8)) T2(.funsel(FunSel), .e(T2e), .i(i), .q(T2out));
-  register #(.NBits(8)) T3(.funsel(FunSel), .e(T3e), .i(i), .q(T3out));
-  register #(.NBits(8)) T4(.funsel(FunSel), .e(T4e), .i(i), .q(T4out));
+  register #(.NBits(8)) R1(.funsel(FunSel), .e(R1e), .i(i), .q(R1out), .clk(clk));
+  register #(.NBits(8)) R2(.funsel(FunSel), .e(R2e), .i(i), .q(R2out), .clk(clk));
+  register #(.NBits(8)) R3(.funsel(FunSel), .e(R3e), .i(i), .q(R3out), .clk(clk));
+  register #(.NBits(8)) R4(.funsel(FunSel), .e(R4e), .i(i), .q(R4out), .clk(clk));
+  register #(.NBits(8)) T1(.funsel(FunSel), .e(T1e), .i(i), .q(T1out), .clk(clk));
+  register #(.NBits(8)) T2(.funsel(FunSel), .e(T2e), .i(i), .q(T2out), .clk(clk));
+  register #(.NBits(8)) T3(.funsel(FunSel), .e(T3e), .i(i), .q(T3out), .clk(clk));
+  register #(.NBits(8)) T4(.funsel(FunSel), .e(T4e), .i(i), .q(T4out), .clk(clk));
 
 
 
-  always @(*) begin
+  always @(posedge clk) begin
     {R1e, R2e, R3e, R4e} = RSel;
     {T1e, T2e, T3e, T4e} = TSel;
     
