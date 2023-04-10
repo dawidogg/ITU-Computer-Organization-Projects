@@ -21,6 +21,22 @@ module Project1Test();
     reg[1:0] MuxBSel;
     reg MuxCSel;
     reg      Clock;
+    //output
+    wire[7:0] out;
+    //provisional outputs for debugging
+    ///*
+    wire[7:0] p_RF_O1;
+    wire[7:0] p_RF_O2;
+    wire[7:0] p_ALU_Out;
+    wire[7:0] p_ALU_ZCNO;
+    wire[7:0] p_ARF_OutA;
+    wire[7:0] p_MEM_Address;
+    wire[7:0] p_MEM_Out;
+    wire[7:0] p_IR_Out;
+    wire[7:0] p_MUXA_Out;
+    wire[7:0] p_MUXB_Out;
+    wire[7:0] p_MUXC_Out;
+    //*/
     
     //Test Bench Connection of ALU System
     ALUSystem _ALUSystem(
@@ -43,6 +59,24 @@ module Project1Test();
     .MuxBSel(MuxBSel),
     .MuxCSel(MuxCSel),
     .Clock(Clock)
+    //output
+    ,.out(out)
+    //provisional outputs
+    ///*
+    ,.p_RF_O1(p_RF_O1)
+    ,.p_RF_O2(p_RF_O2)
+    ,.p_ALU_Out(p_ALU_Out)
+    ,.p_ALU_ZCNO(p_ALU_ZCNO)
+    ,.p_ARF_OutA(p_ARF_OutA)
+    ,.p_MEM_Address(p_MEM_Address)
+    ,.p_MEM_Out(p_MEM_Out)
+    ,.p_IR_Out(p_IR_Out)
+    ,.p_MUXA_Out(p_MUXA_Out)
+    ,.p_MUXB_Out(p_MUXB_Out)
+    ,.p_MUXC_Out(p_MUXC_Out)
+    
+    
+    //*/
     );
     
     //Test Vector Variables
