@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module Project1Test();
     //Input Registers of ALUSystem
     reg[2:0] RF_O1Sel; 
@@ -21,6 +19,7 @@ module Project1Test();
     reg[1:0] MuxBSel;
     reg MuxCSel;
     reg      Clock;
+    
     //output
     wire[7:0] out;
     //provisional outputs for debugging
@@ -28,18 +27,18 @@ module Project1Test();
     wire[7:0] p_RF_O1;
     wire[7:0] p_RF_O2;
     wire[7:0] p_ALU_Out;
-    wire[7:0] p_ALU_ZCNO;
+    wire[3:0] p_ALU_ZCNO;
     wire[7:0] p_ARF_OutA;
     wire[7:0] p_MEM_Address;
     wire[7:0] p_MEM_Out;
-    wire[7:0] p_IR_Out;
+    wire[15:0] p_IR_Out;
     wire[7:0] p_MUXA_Out;
     wire[7:0] p_MUXB_Out;
     wire[7:0] p_MUXC_Out;
     //*/
     
     //Test Bench Connection of ALU System
-    ALUSystem _ALUSystem(
+    ALU_System _ALUSystem(
     .RF_OutASel(RF_O1Sel), 
     .RF_OutBSel(RF_O2Sel), 
     .RF_FunSel(RF_FunSel),
@@ -59,7 +58,8 @@ module Project1Test();
     .MuxBSel(MuxBSel),
     .MuxCSel(MuxCSel),
     .Clock(Clock)
-    //output
+    
+     //output
     ,.out(out)
     //provisional outputs
     ///*
@@ -80,14 +80,16 @@ module Project1Test();
     );
     
     //Test Vector Variables
-    reg [31:0] VectorNum, Errors, TotalLine; 
-    reg [39:0] TestVectors[10000:0];
+    reg [41:0] VectorNum, Errors, TotalLine; 
+    reg [41:0] TestVectors[3:0];
     reg Reset, Operation;
-    
+    initial begin
+        Reset = 0;
+    end
     //Clock Signal Generation
     always 
     begin
-        Clock = 1; #5; Clock = 0; #5; // 10ns period
+        Clock = 1; #15; Clock = 0; #15; // 10ns period
     end
     
     //Read Test Bench Values
@@ -115,7 +117,7 @@ module Project1Test();
             $display("Operation: %d", Operation);
             $display("Register File: O1Sel: %d, O2Sel: %d, FunSel: %d, RSel: %d, TSel: %d", RF_O1Sel, RF_O2Sel, RF_FunSel, RF_RSel, RF_TSel);            
             $display("ALU FunSel: %d", ALU_FunSel);
-            $display("Addres Register File: OutCSel: %d, OutDSel: %d, FunSel: %d, Regsel: %d", ARF_OutASel, ARF_OutBSel, ARF_FunSel, ARF_RSel);            
+            $display("Addres Register File: OutASel: %d, OutBSel: %d, FunSel: %d, Regsel: %d", ARF_OutASel, ARF_OutBSel, ARF_FunSel, ARF_RSel);            
             $display("Instruction Register: LH: %d, Enable: %d, FunSel: %d", IR_LH, IR_Enable, IR_Funsel);            
             $display("Memory: WR: %d, CS: %d", Mem_WR, Mem_CS);
             $display("MuxASel: %d, MuxBSel: %d, MuxCSel: %d", MuxASel, MuxBSel, MuxCSel);
@@ -131,7 +133,7 @@ module Project1Test();
             
             // increment array index and read next testvector
             VectorNum = VectorNum + 1;
-            if (TestVectors[VectorNum] === 40'bx)
+            if (TestVectors[VectorNum] === 42'bx)
             begin
                 $display("%d tests completed.",
                 VectorNum);

@@ -8,8 +8,8 @@ module mux1to2 (input [0:0] sel,
                 
     always @ (posedge clk) begin
         case (sel)
-            3'b00: out = I0;
-            3'b01: out = I1;
+            1'b0: out <= I0;
+            1'b1: out <= I1;
         endcase
     end
 endmodule
@@ -24,17 +24,16 @@ module mux2to4 (input [1:0] sel,
                 
     always @ (posedge clk) begin
         case (sel)
-            3'b00: out = I0;
-            3'b01: out = I1;
-            3'b10: out = I2;
-            3'b11: out = I3;
-
-        endcase
-    end
+            2'b00: out <= I0; 
+            2'b01: out <= I1; 
+            2'b10: out <= I2; 
+            2'b11: out <= I3; 
+            endcase 
+        end
 endmodule
 
 
-module ALUSystem(
+module ALU_System(
     //multiplexers
     input[1:0] MuxASel,
     input[1:0] MuxBSel,
@@ -61,8 +60,23 @@ module ALUSystem(
     input[0:0] Mem_CS,
     //clock
     input[0:0] Clock
-    //output
-    //output[7:0] out // IROut 15-8, but it is probably not needed
+    //output 
+    ,output[7:0] out // IROut 15-8, but it is probably not needed
+    //provisional outputs
+    ///*
+    ,output[7:0] p_RF_O1
+    ,output[7:0] p_RF_O2
+    ,output[7:0] p_ALU_Out
+    ,output[3:0] p_ALU_ZCNO
+    ,output[7:0] p_ARF_OutA
+    ,output[7:0] p_MEM_Address
+    ,output[7:0] p_MEM_Out
+    ,output[15:0] p_IR_Out
+    ,output[7:0] p_MUXA_Out
+    ,output[7:0] p_MUXB_Out
+    ,output[7:0] p_MUXC_Out
+    
+    //*/
     );
     
     // i think its better to use assign and use original names for every part
@@ -126,7 +140,7 @@ module ALUSystem(
     assign IR_out_low = IR_out[7:0]; //maybe IR_out[0:7]
     assign IR_out_high = IR_out[15:8]; // maybe IR_out[8:15]
     //System
-    //assign out = IR_out_high; //probably not needed
+    assign out = IR_out_high; //probably not needed
     //MUXA
     assign A_I0 = OutALU;
     assign A_I1 = MEM_out;
@@ -140,6 +154,24 @@ module ALUSystem(
     //MUXC
     assign C_I0 = RF_O1;
     assign C_I1 = ARF_OutA;
+    //provisional outputs
+    ///*
+    assign p_RF_O1        = RF_O1;
+    assign p_RF_O2        = RF_O2;
+    assign p_ALU_Out      = OutALU;
+    assign p_ALU_ZCNO     = ALU_ZCNO;
+    assign p_ARF_OutA     = ARF_OutA;
+    assign p_MEM_Address  = MEM_address;
+    assign p_MEM_Out      = MEM_out;
+    assign p_IR_Out       = IR_out;
+    assign p_MUXA_Out     = MUXA_out;
+    assign p_MUXB_Out     = MUXB_out;
+    assign p_MUXC_Out     = MUXC_out;
+    //*/
+    
+    initial begin
+    
+    end
     
     //modules
     mux2to4 MUXA(
@@ -178,6 +210,7 @@ module ALUSystem(
         .I1(B_I1),
         .I2(B_I2),
         .I3(B_I3),
+        .clk(Clock),
         .out(MUXB_out)
     );
     
