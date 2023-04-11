@@ -31,33 +31,32 @@ module RF(
   register #(.NBits(8)) T4(.funsel(FunSel), .e(T4e), .i(i), .q(T4out), .clk(dclk));
 
 
-
   always @(posedge clk) begin
     dclk = 1'b0;
     {R1e, R2e, R3e, R4e} = RSel;
     {T1e, T2e, T3e, T4e} = TSel;
-    
+    #0.01;
+    dclk = 1'b1;
+    #0.01; //delaying for registers
     case (O1Sel)
-      3'b000:  O1 = T1out;
-      3'b001:  O1 = T2out;
-      3'b010:  O1 = T3out;
-      3'b011:  O1 = T4out;
-      3'b100:  O1 = R1out;
-      3'b101:  O1 = R2out;
-      3'b110:  O1 = R3out;
-      3'b111:  O1 = R4out;
+      3'b000:  begin  O1 = T1out; end
+      3'b001:  begin  O1 = T2out; end
+      3'b010:  begin  O1 = T3out; end
+      3'b011:  begin  O1 = T4out; end
+      3'b100:  begin  O1 = R1out; end
+      3'b101:  begin  O1 = R2out; end
+      3'b110:  begin  O1 = R3out; end
+      3'b111:  begin  O1 = R4out; end
     endcase
     case (O2Sel)
-      3'b000:  O2 = T1out;
-      3'b001:  O2 = T2out;
-      3'b010:  O2 = T3out;
-      3'b011:  O2 = T4out;
-      3'b100:  O2 = R1out;
-      3'b101:  O2 = R2out;
-      3'b110:  O2 = R3out;
-      3'b111:  O2 = R4out;
+      3'b000:  begin  O2 = T1out; end
+      3'b001:  begin  O2 = T2out; end
+      3'b010:  begin  O2 = T3out; end
+      3'b011:  begin  O2 = T4out; end
+      3'b100:  begin  O2 = R1out; end
+      3'b101:  begin  O2 = R2out; end
+      3'b110:  begin  O2 = R3out; end
+      3'b111:  begin  O2 = R4out; end
     endcase
-    #1;
-    dclk = 1'b1;
     end
 endmodule
