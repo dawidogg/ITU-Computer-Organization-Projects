@@ -62,21 +62,6 @@ module ALU_System(
     input[0:0] Clock
     //output 
     ,output[7:0] out // IROut 15-8, but it is probably not needed
-    //provisional outputs
-    ///*
-    ,output[7:0] p_RF_O1
-    ,output[7:0] p_RF_O2
-    ,output[7:0] p_ALU_Out
-    ,output[3:0] p_ALU_ZCNO
-    ,output[7:0] p_ARF_OutA
-    ,output[7:0] p_MEM_Address
-    ,output[7:0] p_MEM_Out
-    ,output[15:0] p_IR_Out
-    ,output[7:0] p_MUXA_Out
-    ,output[7:0] p_MUXB_Out
-    ,output[7:0] p_MUXC_Out
-    
-    //*/
     );
     
     // i think its better to use assign and use original names for every part
@@ -154,20 +139,7 @@ module ALU_System(
     //MUXC
     assign C_I0 = RF_O1;
     assign C_I1 = ARF_OutA;
-    //provisional outputs
-    ///*
-    assign p_RF_O1        = RF_O1;
-    assign p_RF_O2        = RF_O2;
-    assign p_ALU_Out      = OutALU;
-    assign p_ALU_ZCNO     = ALU_ZCNO;
-    assign p_ARF_OutA     = ARF_OutA;
-    assign p_MEM_Address  = MEM_address;
-    assign p_MEM_Out      = MEM_out;
-    assign p_IR_Out       = IR_out;
-    assign p_MUXA_Out     = MUXA_out;
-    assign p_MUXB_Out     = MUXB_out;
-    assign p_MUXC_Out     = MUXC_out;
-    //*/
+
     
     initial begin
     
