@@ -11,4 +11,4 @@
   - Part 2c :heavy_check_mark: - Denis
   - Part 3 :heavy_check_mark: - Matay
   - Part 4 :heavy_check_mark::skull: - Mustafa
-  - Report - :hourglass: - Denis Matay Mustafa
+  - Report :heavy_check_mark: - Denis Matay Mustafa
