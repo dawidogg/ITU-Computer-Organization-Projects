@@ -42,7 +42,7 @@ always @(posedge CLK) begin
       out = ~B;
     end
     4'b0100:begin // A + B
-      {in[2], out} = {A[7], A} + {B[7], B};
+      {in[2], out} = {A[7], A} + {B[7], B}  + {8'h00, in[2]};
       if((A[7] == B[7]) && (B[7] != out[7])) // Check overflow
         in[0] = 1'b1;
       else 
