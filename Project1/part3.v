@@ -22,10 +22,6 @@ register #(.NBits(4)) zcno (
   .q(ZCNO)
 );
 
-initial begin
-  in = 4'b0000;
-end
-
 always @(posedge CLK) begin
   dclk = 1'b0;
   case(FunSel)
