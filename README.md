@@ -10,5 +10,5 @@
   - Part 2b :heavy_check_mark: - Mustafa 
   - Part 2c :heavy_check_mark: - Denis
   - Part 3 :heavy_check_mark: - Matay
-  - Part 4 :hourglass: - Mustafa
+  - Part 4 :hourglass::skull: - Mustafa
   - Report - 
