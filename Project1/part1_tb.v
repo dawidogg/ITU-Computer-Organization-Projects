@@ -22,6 +22,7 @@ module register_tb;
   always #5 clk = ~clk;
 
   initial begin
+    $dumpvars;
     $display("Testing 4-bit register \n");
     clk = 1'b0;
     input_4 = 4'b0;

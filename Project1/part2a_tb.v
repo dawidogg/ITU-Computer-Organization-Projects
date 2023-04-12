@@ -41,7 +41,7 @@ end
 endtask;
 
 initial begin
-  $dumpfile("dump.vcd"); $dumpvars;
+  $dumpvars;
   $display("Testing 16-bit instruction register");
   $monitor("%6b %6b %6b %6b   0x%h 0x%h%h", clk, e, l_h, funsel, i_half, ir_out[15:8], ir_out[7:0]);
   e = 1'b1; 

@@ -26,6 +26,7 @@ module part2c_tb;
   task showRegistersThroughA; 
   begin
     $write("A:%6h %6b %6b ", i, funsel, r_sel);
+    r_sel = 4'b0000;
     out_a_sel = 2'b00;
     repeat(4) begin
       #10;
@@ -39,6 +40,7 @@ module part2c_tb;
   task showRegistersThroughB; 
   begin
     $write("B:%6h %6b %6b ", i, funsel, r_sel);
+    r_sel = 4'b0000;
     out_b_sel = 2'b00;
     repeat(4) begin
       #10;
@@ -65,7 +67,7 @@ module part2c_tb;
   always #5 clk = ~clk;
 
   initial begin
-    $dumpfile("dump.vcd"); $dumpvars;
+    $dumpvars;
     $display("Testing adress register file (ARF)");
     clk = 0;
 
@@ -96,7 +98,6 @@ module part2c_tb;
     displayHead;
     repeat(15) begin
       r_sel = $urandom(seed)%(64); #10;
-      r_sel = 0;
       showRegistersThroughA;
     end
 
@@ -106,7 +107,6 @@ module part2c_tb;
     displayHead;
     repeat(15) begin
       r_sel = $urandom(seed)%(64); #10;
-      r_sel = 0;
       showRegistersThroughB;
     end
 
