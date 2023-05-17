@@ -1,7 +1,7 @@
 `include "part2c.v"
 
 module part2c_tb;
-  integer seed = 315001;
+  integer seed = 3101;
   reg clk;
   reg[7:0] i;
   reg[1:0] out_a_sel, out_b_sel, funsel;
