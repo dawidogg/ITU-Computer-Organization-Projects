@@ -29,6 +29,7 @@ module alu_tb;
   always #10 clk = ~clk;
   
   initial begin
+    $dumpvars;
     clk = 1'b0;
     
     // Test each function
@@ -52,5 +53,6 @@ module alu_tb;
     repeat(9) begin
       a = outalu; #20; 
     end
+    $finish;
   end
 endmodule

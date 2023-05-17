@@ -1,5 +1,3 @@
-`include "part1.v"
-
 module ARF(
   input           clk,
   input[7:0]      i,
@@ -7,56 +5,43 @@ module ARF(
   input[1:0]      out_a_sel,
   input[1:0]      funsel,
   input[3:0]      r_sel,
-  output reg[7:0] out_a,
-  output reg[7:0] out_b
+  output[7:0] out_a,
+  output[7:0] out_b
 );
 
-  reg dclk;
-
   register #(.NBits(8)) PC (
-    .clk    (dclk),
+    .clk    (clk),
     .funsel (funsel),
     .i      (i     )
   );
 
   register #(.NBits(8)) AR (
-    .clk    (dclk),
+    .clk    (clk),
     .funsel (funsel),
     .i      (i     )
   );
 
   register #(.NBits(8)) SP (
-    .clk    (dclk),
+    .clk    (clk),
     .funsel (funsel),
     .i      (i     )
   );
 
   register #(.NBits(8)) PC_past (
-    .clk    (dclk),
+    .clk    (clk),
     .funsel (funsel),
     .i      (i     )
   );
 
-  assign {AR.e,  SP.e, PC_past.e, PC.e} = r_sel;
+  assign {AR.e, SP.e, PC_past.e, PC.e} = r_sel;
 
-  always @(posedge clk) begin
-    dclk = 0;
-    case (out_a_sel)
-      2'b00: out_a = AR.q;
-      2'b01: out_a = SP.q;
-      2'b10: out_a = PC_past.q;
-      2'b11: out_a = PC.q;
-    endcase
-    
-    case (out_b_sel)
-      2'b00: out_b = AR.q;
-      2'b01: out_b = SP.q;
-      2'b10: out_b = PC_past.q;
-      2'b11: out_b = PC.q;
-    endcase
+  assign out_a = (out_a_sel == 2'b00)? AR.q : 8'bz;
+  assign out_a = (out_a_sel == 2'b01)? SP.q : 8'bz;
+  assign out_a = (out_a_sel == 2'b10)? PC_past.q : 8'bz;
+  assign out_a = (out_a_sel == 2'b11)? PC.q : 8'bz;
 
-    #1;
-    dclk = 1;
-  end
-
+  assign out_b = (out_b_sel == 2'b00)? AR.q : 8'bz;
+  assign out_b = (out_b_sel == 2'b01)? SP.q : 8'bz;
+  assign out_b = (out_b_sel == 2'b10)? PC_past.q : 8'bz;
+  assign out_b = (out_b_sel == 2'b11)? PC.q : 8'bz;
 endmodule

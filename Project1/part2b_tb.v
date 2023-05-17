@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`include "part2b.v"
 
 module part2b_tb();
 
@@ -22,7 +23,7 @@ module part2b_tb();
     always #13 clk = ~clk;
  
     initial begin
-    
+        $dumpvars;
         //initializing registers   
         RSel = 4'b1111; TSel = 4'b1111;
         O1Sel = 3'b100; O2Sel = 3'b000;  //R1 and T1
@@ -56,6 +57,7 @@ module part2b_tb();
         //enabling all registers
         RSel = 4'b1111; TSel = 4'b1111; //all and all; 
     
+        $finish;
     end
 
 endmodule

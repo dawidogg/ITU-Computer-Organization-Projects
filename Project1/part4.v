@@ -1,12 +1,11 @@
 `timescale 1ns / 1ps
 
-module mux1to2 (input [0:0] sel, 
+module mux1to2 (input       sel, 
                 input [7:0] I0,
                 input [7:0] I1,
-                input [0:0] clk,
                 output reg[7:0] out);
                 
-    always @ (posedge clk) begin
+    always @ (*) begin
         case (sel)
             1'b0: out <= I0;
             1'b1: out <= I1;
@@ -19,17 +18,16 @@ module mux2to4 (input [1:0] sel,
                 input [7:0] I1,
                 input [7:0] I2,
                 input [7:0] I3,
-                input [0:0] clk,
                 output reg[7:0] out);
                 
-    always @ (posedge clk) begin
+    always @ (*) begin
         case (sel)
             2'b00: out <= I0; 
             2'b01: out <= I1; 
             2'b10: out <= I2; 
             2'b11: out <= I3; 
-            endcase 
-        end
+        endcase 
+    end
 endmodule
 
 
@@ -37,10 +35,10 @@ module ALU_System(
     //multiplexers
     input[1:0] MuxASel,
     input[1:0] MuxBSel,
-    input[0:0] MuxCSel,
+    input      MuxCSel,
     // register file
-    input[2:0] RF_OutASel,//o1sel
-    input[2:0] RF_OutBSel,//o2sel
+    input[2:0] RF_OutASel, //o1sel
+    input[2:0] RF_OutBSel, //o2sel
     input[1:0] RF_FunSel,
     input[3:0] RF_TSel,
     input[3:0] RF_RSel,
@@ -53,15 +51,15 @@ module ALU_System(
     input[3:0] ARF_RSel,
     // instruction register (IR)
     input[1:0] IR_Funsel,
-    input[0:0] IR_Enable,
-    input[0:0] IR_LH,
+    input      IR_Enable,
+    input      IR_LH,
     //MEM
-    input[0:0] Mem_WR,
-    input[0:0] Mem_CS,
+    input      Mem_WR,
+    input      Mem_CS,
     //clock
-    input[0:0] Clock
+    input      Clock,
     //output 
-    ,output[7:0] out // IROut 15-8, but it is probably not needed
+    output[7:0] out // IROut 15-8, but it is probably not needed
     );
     
     // i think its better to use assign and use original names for every part
@@ -88,7 +86,7 @@ module ALU_System(
     wire[7:0] B_I0;
     wire[7:0] B_I1;
     wire[7:0] B_I2;
-    wire[7:0] B_I3; //TÜM MUXLAR ?Ç?N LOG?CE GÖRE KARAR VER NASIL OLACAK
+    wire[7:0] B_I3; 
     wire[7:0] MUXB_out;
     //ARF
     wire[7:0] ARF_i;
@@ -140,11 +138,6 @@ module ALU_System(
     assign C_I0 = RF_O1;
     assign C_I1 = ARF_OutA;
 
-    
-    initial begin
-    
-    end
-    
     //modules
     mux2to4 MUXA(
         .sel(MuxASel),
@@ -152,7 +145,6 @@ module ALU_System(
         .I1(A_I1),
         .I2(A_I2),
         .I3(A_I3),
-        .clk(Clock),
         .out(MUXA_out)
     );
     
@@ -172,7 +164,6 @@ module ALU_System(
         .sel(MuxCSel),
         .I0(C_I0),
         .I1(C_I1),
-        .clk(Clock),
         .out(MUXC_out)
     );
     
@@ -182,7 +173,6 @@ module ALU_System(
         .I1(B_I1),
         .I2(B_I2),
         .I3(B_I3),
-        .clk(Clock),
         .out(MUXB_out)
     );
     
@@ -223,6 +213,5 @@ module ALU_System(
       .ir_out (IR_out),
       .clk(Clock)
     );
-
     
 endmodule

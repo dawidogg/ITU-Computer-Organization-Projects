@@ -13,17 +13,15 @@ reg[7:0] out;
 assign OutALU = out;
 
 reg[3:0] in;
-reg      dclk;
 register #(.NBits(4)) zcno (
   .funsel(2'b01),
   .i(in),
   .e(1'b1),
-  .clk(dclk),
+  .clk(CLK),
   .q(ZCNO)
 );
 
-always @(posedge CLK) begin
-  dclk = 1'b0;
+always @(*) begin
   case(FunSel)
     4'b0000:begin // A
       out = A;
@@ -110,7 +108,5 @@ always @(posedge CLK) begin
     in[1] = 1'b1;
   else
     in[1] = 1'b0;
-    
-  #1; dclk = 1'b1;
 end
 endmodule
