@@ -1,0 +1,39 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Fri May 19 22:19:53 2023
+[*]
+[dumpfile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/dump.vcd"
+[dumpfile_mtime] "Fri May 19 22:17:18 2023"
+[dumpfile_size] 19611
+[savefile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/debug.gtkw"
+[timestart] 0
+[size] 1558 840
+[pos] -59 22
+*-13.000000 28500 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] control_unit.
+[treeopen] control_unit.alu_sys.
+[treeopen] control_unit.alu_sys._ARF.
+[treeopen] control_unit.alu_sys._RF.
+[sst_width] 267
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 453
+@22
+control_unit.alu_sys._IR.ir_out[15:0]
+@28
+control_unit.clk
+@22
+control_unit.alu_sys._RF.R1.data[7:0]
+control_unit.alu_sys._RF.R2.data[7:0]
+@28
+control_unit.I
+@22
+control_unit.alu_sys._ARF.AR.data[7:0]
+@28
+control_unit.alu_sys._MEMORY.cs
+@22
+control_unit.alu_sys._MEMORY.data[7:0]
+@29
+control_unit.alu_sys._MEMORY.wr
+[pattern_trace] 1
+[pattern_trace] 0

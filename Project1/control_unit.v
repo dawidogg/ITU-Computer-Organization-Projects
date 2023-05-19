@@ -1,4 +1,5 @@
 // iverilog control_unit.v part4.v part3.v part2c.v part2b.v part2a.v part1.v Memory.v
+`timescale 1ns / 1ps
 
 module decoder_4_16(
   input [3:0] in,
@@ -24,9 +25,7 @@ module decoder_4_16(
   };
 endmodule
 
-module control_unit(
-  input clk
-);
+module control_unit;
   reg[1:0] MuxASel;
   reg[1:0] MuxBSel;
   reg      MuxCSel;
@@ -50,6 +49,8 @@ module control_unit(
   //MEM
   reg      Mem_WR;
   reg      Mem_CS;
+
+  reg clk;
 
   ALU_System alu_sys(
     MuxASel,
@@ -100,13 +101,20 @@ module control_unit(
 
   // addressing mode bit
   wire I;
-  assign I = alu_sys.IR_out[5];
+  assign I = alu_sys.IR_out[10];
 
   initial begin
+    $dumpvars;
     // Set sequence counter to increment 
     s_counter_funsel = 2'b11;
     // Disable memory
     Mem_CS = 1;
+
+    clk = 0;
+    repeat(50) #1 clk = ~clk; 
+
+    $writememh("RAM_OUT.mem", alu_sys._MEMORY.RAM_DATA);
+    $finish;
   end
 
   always @(*) begin
@@ -114,6 +122,7 @@ module control_unit(
 
     if (T[0]) begin
       // IR(0-7) <-
+      IR_Enable = 1;
       IR_Funsel = 2'b01;
       IR_LH = 0;
       // <- M[PC]
@@ -130,6 +139,7 @@ module control_unit(
 
     if (T[1]) begin
       // IR(8-15) <-
+      IR_Enable = 1;
       IR_Funsel = 2'b01;
       IR_LH = 1;
       // <- M[PC]
@@ -145,14 +155,15 @@ module control_unit(
     end
 
     if (T[2]) begin
+      // direct adressing
       // AR <- IR(8-15)
       MuxBSel = 2'b10;
       ARF_FunSel = 2'b01;
       ARF_RSel = 4'b1000;
-
       Mem_CS = 1; // disable memory
       s_counter_funsel = 2'b11;
       RF_RSel = 4'b0000;
+      IR_Enable = 0;
     end
 
     // AND
@@ -249,12 +260,13 @@ module control_unit(
 
       Mem_CS = 1; // disable memory
       s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // LD
     if (T[3] && K[12]) begin
       // Rx <-
-      RF_RSel = d_rsel;
+      RF_RSel = {d_rsel[0], d_rsel[1], d_rsel[2], d_rsel[3]};
       RF_FunSel = 2'b01;
       
       if (I == 0) begin
@@ -274,6 +286,8 @@ module control_unit(
       end
 
       s_counter_funsel = 2'b00; // reset counter
+      ARF_RSel = 4'b0000;
+      IR_Enable = 0;
     end  
 
     // ST
@@ -291,12 +305,14 @@ module control_unit(
       if (d_rsel[3]) RF_OutBSel = 3'b111;
 
       s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
+      ARF_RSel = 4'b0000;
     end  
 
     // PUL
     if (T[3] && K[14]) begin
       // Rx <-
-      RF_RSel = d_rsel;
+      RF_RSel = {d_rsel[0], d_rsel[1], d_rsel[2], d_rsel[3]};
       RF_FunSel = 2'b01;
 
       // <- M[SP]
@@ -309,6 +325,7 @@ module control_unit(
       ARF_FunSel = 2'b11;
 
       s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // PSH
@@ -330,6 +347,7 @@ module control_unit(
       ARF_FunSel = 2'b10;
 
       s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
   
   end
