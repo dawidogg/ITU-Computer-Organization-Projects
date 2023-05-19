@@ -11,6 +11,8 @@ parameter NBits = 16
 reg[NBits-1:0] data;
 assign q = data;
 
+initial data = {NBits{1'b0}};
+
 always @(posedge clk) begin
   if (e)
     case (funsel)

@@ -185,7 +185,7 @@ void hexToBin(int h, int vals[8]) {
 
 int main(int argc, char *argv[]) {
     FILE *assembly_file, *memory_file, *bin_memory_file;
-    memory_file = fopen("./HEX_RAM.mem", "w");    
+    memory_file = fopen("./RAM.mem", "w");    
     bin_memory_file = fopen("./BIN_RAM.mem", "w");
     if (argc == 2)
         assembly_file = fopen(argv[1], "r");
@@ -204,20 +204,20 @@ int main(int argc, char *argv[]) {
     }
 
     // First pass - find labels
-    int position = -1;
+    int position = 0;
     label_count = 0;
     for (int i = 0; i < line_count; i++) {
-        position++;
         printf("Position: 0x%x, instruction: %s\n", position, parsed_string[i].arg[0]);
         if (strcmp(parsed_string[i].arg[0], "ORG") == 0) {
-            position = stringToHex(parsed_string[i].arg[1])-1;
+            position = stringToHex(parsed_string[i].arg[1]);
             continue;
         }
         if (strlen(parsed_string[i].label) > 0) {
             strcpy(LabelTable[label_count].name, parsed_string[i].label);
             LabelTable[label_count].position = position;
             label_count++;
-        }
+        }        
+        position += 2;
     }
 
     for (int i = 0; i < label_count; i++)
@@ -227,11 +227,10 @@ int main(int argc, char *argv[]) {
     int RAM[256] = {0};
     int BIN_RAM[256][16] = {{0},{0},{0},{0},{0},{0},{0},{0},
                             {0},{0},{0},{0},{0},{0},{0},{0}};
-    position = -1;
+    position = 0;
     for (int i = 0; i < line_count; i++) {
-        position++;
         if (strcmp(parsed_string[i].arg[0], "ORG") == 0) {
-            position = stringToHex(parsed_string[i].arg[1])-1;
+            position = stringToHex(parsed_string[i].arg[1]);
             continue;
         }
         if (strcmp(parsed_string[i].arg[0], "END") == 0)
@@ -308,13 +307,20 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < 16; j++) {
             BIN_RAM[position][j] = bytes[j];
             RAM[position] += power(2, 15-j)*bytes[j];
-        }
+        }        
+        position += 2;
     }
 
     // Write out to files
-    for (int i = 0; i < 256; i++) {
-        fprintf(memory_file, "%04x\n", RAM[i]);
-        for (int j = 0; j < 16; j++)
+    for (int i = 0; i < 256; i += 2) {
+        char hex_buffer[5];
+        sprintf(hex_buffer, "%04x", RAM[i]);
+        //printf("%s\n", hex_buffer);
+        fprintf(memory_file, "%c%c\n%c%c\n", hex_buffer[2], hex_buffer[3], hex_buffer[0], hex_buffer[1]);
+        for (int j = 8; j < 16; j++)
+            fprintf(bin_memory_file, "%d", BIN_RAM[i][j]);
+        fprintf(bin_memory_file, "\n");
+        for (int j = 0; j < 8; j++)
             fprintf(bin_memory_file, "%d", BIN_RAM[i][j]);
         fprintf(bin_memory_file, "\n");
     }
@@ -323,6 +329,6 @@ int main(int argc, char *argv[]) {
     fclose(memory_file);
     fclose(bin_memory_file);
     
-    printf("HEX_RAM.mem and BIN_RAM.mem were created.\n");
+    printf("RAM.mem and BIN_RAM.mem were created.\n");
     return 0;
 }
