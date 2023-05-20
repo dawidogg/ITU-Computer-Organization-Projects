@@ -173,38 +173,392 @@ module control_unit;
 
     // AND
     if (T[3] && K[0]) begin
-    
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- SREG1 and SREG2
+
+      // Both SREGs cannot be from ARF
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      if (d_sreg2[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg2[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg2[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg2[7]) ARF_OutASel = 2'b11; // PC
+      
+      if ((d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) || 
+         (d_sreg2[4] || d_sreg2[5] || d_sreg2[6] || d_sreg2[7])) begin
+        MuxCSel = 1'b1; // Select ARF_OutA
+        // One of SREGs from RF
+        if (d_sreg1[0]) RF_OutBSel = 3'b100;
+        if (d_sreg1[1]) RF_OutBSel = 3'b101;
+        if (d_sreg1[2]) RF_OutBSel = 3'b110;
+        if (d_sreg1[3]) RF_OutBSel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end else begin
+        MuxCSel = 1'b0; // Select RF_OutA
+        // Both SREGs from RF
+        if (d_sreg1[0]) RF_OutASel = 3'b100;
+        if (d_sreg1[1]) RF_OutASel = 3'b101;
+        if (d_sreg1[2]) RF_OutASel = 3'b110;
+        if (d_sreg1[3]) RF_OutASel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end
+
+      ALU_FunSel = 4'b0111; // AND
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
     
     // OR
     if (T[3] && K[1]) begin
-    
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- SREG1 or SREG2
+
+      // Both SREGs cannot be from ARF
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      if (d_sreg2[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg2[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg2[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg2[7]) ARF_OutASel = 2'b11; // PC
+      
+      if ((d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) || 
+         (d_sreg2[4] || d_sreg2[5] || d_sreg2[6] || d_sreg2[7])) begin
+        MuxCSel = 1'b1; // Select ARF_OutA
+        // One of SREGs from RF
+        if (d_sreg1[0]) RF_OutBSel = 3'b100;
+        if (d_sreg1[1]) RF_OutBSel = 3'b101;
+        if (d_sreg1[2]) RF_OutBSel = 3'b110;
+        if (d_sreg1[3]) RF_OutBSel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end else begin
+        MuxCSel = 1'b0; // Select RF_OutA
+        // Both SREGs from RF
+        if (d_sreg1[0]) RF_OutASel = 3'b100;
+        if (d_sreg1[1]) RF_OutASel = 3'b101;
+        if (d_sreg1[2]) RF_OutASel = 3'b110;
+        if (d_sreg1[3]) RF_OutASel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end
+
+      ALU_FunSel = 4'b1000; // OR
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // NOT
     if (T[3] && K[2]) begin
-    
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+      MuxCSel = 1'b1; // Select ARF_OutA
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- not SREG1
+
+      // If R1, R2, R3 or R4
+      if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3])
+        ALU_FunSel = 4'b0011; // NOT B
+      if (d_sreg1[0]) RF_OutBSel = 3'b100;
+      if (d_sreg1[1]) RF_OutBSel = 3'b101;
+      if (d_sreg1[2]) RF_OutBSel = 3'b110;
+      if (d_sreg1[3]) RF_OutBSel = 3'b111;
+      
+      // If SP, AR, PC, PC
+      if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) 
+        ALU_FunSel = 4'b0010; // NOT A
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // ADD
     if (T[3] && K[3]) begin
-    
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- SREG1 + SREG2
+
+      // Both SREGs cannot be from ARF
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      if (d_sreg2[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg2[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg2[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg2[7]) ARF_OutASel = 2'b11; // PC
+      
+      if ((d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) || 
+         (d_sreg2[4] || d_sreg2[5] || d_sreg2[6] || d_sreg2[7])) begin
+        MuxCSel = 1'b1; // Select ARF_OutA
+        // One of SREGs from RF
+        if (d_sreg1[0]) RF_OutBSel = 3'b100;
+        if (d_sreg1[1]) RF_OutBSel = 3'b101;
+        if (d_sreg1[2]) RF_OutBSel = 3'b110;
+        if (d_sreg1[3]) RF_OutBSel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end else begin
+        MuxCSel = 1'b0; // Select RF_OutA
+        // Both SREGs from RF
+        if (d_sreg1[0]) RF_OutASel = 3'b100;
+        if (d_sreg1[1]) RF_OutASel = 3'b101;
+        if (d_sreg1[2]) RF_OutASel = 3'b110;
+        if (d_sreg1[3]) RF_OutASel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end
+
+      ALU_FunSel = 4'b0100; // ADD
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // SUB
     if (T[3] && K[4]) begin
-    
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- SREG1 - SREG2
+
+      // Both SREGs cannot be from ARF
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      if (d_sreg2[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg2[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg2[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg2[7]) ARF_OutASel = 2'b11; // PC
+      
+      if ((d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) || 
+         (d_sreg2[4] || d_sreg2[5] || d_sreg2[6] || d_sreg2[7])) begin
+        MuxCSel = 1'b1; // Select ARF_OutA
+        // One of SREGs from RF
+        if (d_sreg1[0]) RF_OutBSel = 3'b100;
+        if (d_sreg1[1]) RF_OutBSel = 3'b101;
+        if (d_sreg1[2]) RF_OutBSel = 3'b110;
+        if (d_sreg1[3]) RF_OutBSel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end else begin
+        MuxCSel = 1'b0; // Select RF_OutA
+        // Both SREGs from RF
+        if (d_sreg1[0]) RF_OutASel = 3'b100;
+        if (d_sreg1[1]) RF_OutASel = 3'b101;
+        if (d_sreg1[2]) RF_OutASel = 3'b110;
+        if (d_sreg1[3]) RF_OutASel = 3'b111;
+
+        if (d_sreg2[0]) RF_OutBSel = 3'b100;
+        if (d_sreg2[1]) RF_OutBSel = 3'b101;
+        if (d_sreg2[2]) RF_OutBSel = 3'b110;
+        if (d_sreg2[3]) RF_OutBSel = 3'b111;
+      end
+
+      ALU_FunSel = 4'b0101; // SUB
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // LSR
     if (T[3] && K[5]) begin
-    
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- LSR SREG1
+
+      // If R1, R2, R3 or R4
+      if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3])
+        MuxCSel = 1'b0;
+      if (d_sreg1[0]) RF_OutASel = 3'b100;
+      if (d_sreg1[1]) RF_OutASel = 3'b101;
+      if (d_sreg1[2]) RF_OutASel = 3'b110;
+      if (d_sreg1[3]) RF_OutASel = 3'b111;
+      
+      // If SP, AR, PC, PC
+      if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) 
+        MuxCSel = 1'b1;
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      ALU_FunSel = 4'b1100; // LSR
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
     end  
 
     // LSL
     if (T[3] && K[6]) begin
-    
-    end  
+      MuxASel = 2'b00; // Select ALU
+      MuxBSel = 2'b00; // Select ALU
+
+      // DSTREG <-
+
+      // If R1, R2, R3 or R4
+      if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+        RF_FunSel = 2'b01;
+        RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+      end
+      
+      // If SP, AR, PC, PC
+      if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+        ARF_FunSel = 2'b01;
+        ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+      end
+
+      // <- LSL SREG1
+
+      // If R1, R2, R3 or R4
+      if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3])
+        MuxCSel = 1'b0;
+      if (d_sreg1[0]) RF_OutASel = 3'b100;
+      if (d_sreg1[1]) RF_OutASel = 3'b101;
+      if (d_sreg1[2]) RF_OutASel = 3'b110;
+      if (d_sreg1[3]) RF_OutASel = 3'b111;
+      
+      // If SP, AR, PC, PC
+      if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) 
+        MuxCSel = 1'b1;
+      if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+      if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+      if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+      if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+
+      ALU_FunSel = 4'b1011; // LSL
+      Mem_CS = 1; // disable memory
+      s_counter_funsel = 2'b00; // reset counter
+      IR_Enable = 0;
+    end 
 
     // INC
     if (T[3] && K[7]) begin
