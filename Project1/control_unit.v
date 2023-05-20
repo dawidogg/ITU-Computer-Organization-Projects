@@ -108,7 +108,7 @@ module control_unit;
     // Set sequence counter to increment 
     s_counter_funsel = 2'b11;
     // Disable memory
-    Mem_CS = 1;
+    Mem_WR = 0;
 
     clk = 0;
   end
@@ -161,7 +161,7 @@ module control_unit;
         ARF_RSel = 4'b1000;
       end else ARF_RSel = 4'b0000;
 
-      Mem_CS = 1; // disable memory
+      Mem_WR = 0; // disable memory
       s_counter_funsel = 2'b11;
       RF_RSel = 4'b0000;
       IR_Enable = 0;
@@ -230,6 +230,7 @@ module control_unit;
     if (T[3] && K[11]) begin
       MuxASel = 2'b00; // Select ALU
       MuxBSel = 2'b00; // Select ALU
+      MuxCSel = 1'b1;
 
       // DSTREG <-
 
@@ -263,7 +264,7 @@ module control_unit;
       if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
       if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
 
-      Mem_CS = 1; // disable memory
+      Mem_WR = 0; // disable memory
       s_counter_funsel = 2'b00; // reset counter
       IR_Enable = 0;
     end  
@@ -316,6 +317,7 @@ module control_unit;
 
     // PUL
     if (T[3] && K[14]) begin
+      MuxASel = 2'b01;
       // Rx <-
       RF_RSel = {d_rsel[0], d_rsel[1], d_rsel[2], d_rsel[3]};
       RF_FunSel = 2'b01;
@@ -329,17 +331,26 @@ module control_unit;
       ARF_RSel = 4'b0100;
       ARF_FunSel = 2'b11;
 
-      s_counter_funsel = 2'b00; // reset counter
       IR_Enable = 0;
+      s_counter_funsel = 2'b00; // reset counter
     end  
 
     // PSH
     if (T[3] && K[15]) begin
+      Mem_WR = 0; // read
+      // SP <- SP - 1
+      ARF_RSel = 4'b0100;
+      ARF_FunSel = 2'b10;     
+      IR_Enable = 0;
+    end  
+
+    if (T[4] && K[15]) begin 
       // M[SP] <- 
       Mem_CS = 0; // enable memory
       Mem_WR = 1; // write
       ARF_OutBSel = 2'b01;
-
+      ARF_RSel = 4'b0000;
+      
       // <- Rx
       ALU_FunSel = 4'b0001;
       if (d_rsel[0]) RF_OutBSel = 3'b100;
@@ -347,13 +358,9 @@ module control_unit;
       if (d_rsel[2]) RF_OutBSel = 3'b110;
       if (d_rsel[3]) RF_OutBSel = 3'b111;
 
-      // SP <- SP - 1
-      ARF_RSel = 4'b0100;
-      ARF_FunSel = 2'b10;
-
       s_counter_funsel = 2'b00; // reset counter
       IR_Enable = 0;
-    end  
+    end
   
   end
 endmodule

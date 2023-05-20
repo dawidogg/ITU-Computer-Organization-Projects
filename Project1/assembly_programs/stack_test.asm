@@ -1,0 +1,49 @@
+ORG 0x0
+# Set the stack pointer to proper position
+LD R1 IM STK_BEGIN
+MOV SP R1
+# Push the current position of program to the stack five times
+MOV R1 PC
+PSH R1
+MOV R1 PC
+PSH R1
+MOV R1 PC
+PSH R1
+MOV R1 PC
+PSH R1
+MOV R1 PC
+PSH R1
+# Pop from the stack and save to history
+PUL R1
+LD R2 IM HISTORY_0
+MOV AR R2
+ST R1
+PUL R1
+LD R2 IM HISTORY_1
+MOV AR R2
+ST R1
+PUL R1
+LD R2 IM HISTORY_2
+MOV AR R2
+ST R1
+PUL R1
+LD R2 IM HISTORY_3
+MOV AR R2
+ST R1
+PUL R1
+LD R2 IM HISTORY_4
+MOV AR R2
+ST R1
+ST R1
+HLT
+ORG 0xC0
+# TODO: Imlement with increment
+HISTORY_0: 0x0
+HISTORY_1: 0x0
+HISTORY_2: 0x0
+HISTORY_3: 0x0
+HISTORY_4: 0x0
+ORG 0xFF
+STK_BEGIN:  0x0
+
+END
