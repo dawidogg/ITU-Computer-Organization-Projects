@@ -111,11 +111,9 @@ module control_unit;
     Mem_CS = 1;
 
     clk = 0;
-    repeat(50) #1 clk = ~clk; 
-
-    $writememh("RAM_OUT.mem", alu_sys._MEMORY.RAM_DATA);
-    $finish;
   end
+
+  always #1 clk = ~clk;
 
   always @(*) begin
     // Fetch cycle (T0, T1, T2)
@@ -157,13 +155,20 @@ module control_unit;
     if (T[2]) begin
       // direct adressing
       // AR <- IR(8-15)
-      MuxBSel = 2'b10;
-      ARF_FunSel = 2'b01;
-      ARF_RSel = 4'b1000;
+      if (!I) begin
+        MuxBSel = 2'b10;
+        ARF_FunSel = 2'b01;
+        ARF_RSel = 4'b1000;
+      end else ARF_RSel = 4'b0000;
+
       Mem_CS = 1; // disable memory
       s_counter_funsel = 2'b11;
       RF_RSel = 4'b0000;
       IR_Enable = 0;
+      if (alu_sys.IR_out == 16'hffff) begin
+        $writememh("RAM_OUT.mem", alu_sys._MEMORY.RAM_DATA);
+        $finish;
+      end
     end
 
     // AND

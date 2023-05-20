@@ -23,4 +23,5 @@ INCREMENT:  LD R1 IM RESULT # loading the adress of result
             LD R2 D # loading the value of result
             INC R2 R2 # incrementing
             ST R2 # storing the incremented value back to result
+            HLT
             END        

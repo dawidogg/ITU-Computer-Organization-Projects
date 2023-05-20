@@ -1,0 +1,24 @@
+ORG 0x0
+# Load value at LOC_A to R1
+LD R1 IM LOC_A
+MOV AR R1
+LD R1 D 
+# Load value at LOC_B to R2
+LD R2 IM LOC_B
+MOV AR R2
+LD R2 D
+# Swap. TODO: implement with XOR
+MOV R3 R1
+MOV R1 R2
+MOV R2 R3
+# Store
+LD R3 IM LOC_A
+MOV AR R3
+ST R1
+LD R3 IM LOC_B
+MOV AR R3
+ST R2
+HLT
+LOC_A: 0x12
+LOC_B: 0x70
+END

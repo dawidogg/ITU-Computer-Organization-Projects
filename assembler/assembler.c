@@ -35,8 +35,13 @@ int getOpcodeIndex(char* s) {
                     OpcodeTable[i].value[1]*4 +
                     OpcodeTable[i].value[2]*2 +
                     OpcodeTable[i].value[3]*1;
-        }  
-    return -1; // hexadecimal       
+        } 
+    if (s[0] == '0' && s[1] == 'x') 
+        return -1; // hexadecimal 
+    else {
+        printf("\nError, invalid hexadecimal value %s\n", s);
+        exit(1);
+    }      
 }
 
 struct {
@@ -65,8 +70,8 @@ int getRselIndex(char *s) {
         if (strcmp(s, RselTable[i].symbol) == 0)
             return  RselTable[i].value[0]*2 +
                     RselTable[i].value[1]*1; 
-    printf("Error, invalid R_SEL value: %s\n", s);
-    return -1;
+    printf("\nError, invalid R_SEL value: %s\n", s);
+    exit(1);
 }
 
 int getRegIndex(char *s) {
@@ -76,8 +81,10 @@ int getRegIndex(char *s) {
                     RegTable[i].value[1]*4 + 
                     RegTable[i].value[2]*2 + 
                     RegTable[i].value[3]*1; 
-    if (strlen(s) > 0)
-        printf("Error, invalid DSTREG/SREG1/SREG2 value: %s\n", s);
+    if (strlen(s) > 0) {
+        printf("\nError, invalid DSTREG/SREG1/SREG2 value: %s\n", s);
+        exit(1);
+    }
     return -1;
 }
 
@@ -133,8 +140,10 @@ int parseLine(char *s, struct ParsedString *result) {
     while (ptr1 < s_length) {
         while (ptr1 < s_length && is_space(s[ptr1])) ptr1++;
         if (s[ptr1] == '#' || ptr1 >= s_length) break;
-        if (counter >= 4)
-            printf("Error, too many arguments at the following instruction:\n%s", s);
+        if (counter >= 4) {
+            printf("\nError, too many arguments at the following instruction:\n%s", s);
+            exit(1);
+        }
         ptr2 = ptr1;
         while (!is_space(s[ptr2])) ptr2++;
         strncpy(result->arg[counter], s+ptr1, ptr2-ptr1);
@@ -162,14 +171,26 @@ int stringToHex(char *s) {
         for (int i = 0; i < label_count; i++)
             if (strcmp(LabelTable[i].name, s) == 0)
                 return LabelTable[i].position;
-        printf("Error, unknown label %s\n", s);
+        printf("\nError, unknown label %s\n", s);
+        exit(1);
     }
     int result = 0;
-    for (int i = 2; i < 4; i++) {
+    int s_length = strlen(s);
+    if (s_length == 2 || s_length > 4) {
+        printf("\nError, invalid hexadecimal value %s\n", s);
+        exit(1);
+    }
+    for (int i = s_length-1; i >= 2; i--) {
         if (s[i] >= '0' && s[i] <= '9')
-            result += power(16, 3-i)*(s[i]-'0');
-        if (s[i] >= 'A' && s[i] <= 'F')
-            result += power(16, 3-i)*(s[i]-'A'+10);
+            result += power(16, s_length-1-i)*(s[i]-'0');
+        else if (s[i] >= 'A' && s[i] <= 'F')
+            result += power(16, s_length-1-i)*(s[i]-'A'+10);
+        else if (s[i] >= 'a' && s[i] <= 'f')
+            result += power(16, s_length-1-i)*(s[i]-'a'+10);
+        else {
+            printf("\nError, invalid hexadecimal value %s\n", s);
+            exit(1);
+        }
     }
     return result;
 }
@@ -198,6 +219,7 @@ int main(int argc, char *argv[]) {
     struct ParsedString parsed_string[256];
     char line[256];
     int line_count = 0;
+    printf("Parsing...\n");
     while (fgets(line, sizeof(line), assembly_file)) {
         if (parseLine(line, parsed_string+line_count))
             line_count++;
@@ -207,7 +229,7 @@ int main(int argc, char *argv[]) {
     int position = 0;
     label_count = 0;
     for (int i = 0; i < line_count; i++) {
-        printf("Position: 0x%x, instruction: %s\n", position, parsed_string[i].arg[0]);
+        printf("Position: 0x%02x, instruction: %s\n", position, parsed_string[i].arg[0]);
         if (strcmp(parsed_string[i].arg[0], "ORG") == 0) {
             position = stringToHex(parsed_string[i].arg[1]);
             continue;
@@ -219,23 +241,43 @@ int main(int argc, char *argv[]) {
         }        
         position += 2;
     }
+    printf("\n");
 
+    printf("%d labels detected\n", label_count);
     for (int i = 0; i < label_count; i++)
-        printf("label name: %s, position: 0x%x\n", LabelTable[i].name, LabelTable[i].position);
+        printf("Label name: %s, position: 0x%02x\n", LabelTable[i].name, LabelTable[i].position);
+    printf("\n");
 
     // Second pass - assemble the program
     int RAM[256] = {0};
     int BIN_RAM[256][16] = {{0},{0},{0},{0},{0},{0},{0},{0},
                             {0},{0},{0},{0},{0},{0},{0},{0}};
+    int has_hlt = 0;
     position = 0;
+    printf("Assembling instructions...\n");
     for (int i = 0; i < line_count; i++) {
+        // Pseudo-instructions
         if (strcmp(parsed_string[i].arg[0], "ORG") == 0) {
             position = stringToHex(parsed_string[i].arg[1]);
             continue;
         }
+
         if (strcmp(parsed_string[i].arg[0], "END") == 0)
             break;
 
+        // Custom instruction
+        if (strcmp(parsed_string[i].arg[0], "HLT") == 0) {
+            has_hlt = 1;
+            for (int j = 0; j < 16; j++) {
+                BIN_RAM[position][j] = 1;
+                RAM[position] += power(2, 15-j)*1;
+            }
+            printf("Instruction at 0x%02x: 1111111111111111\n", position);
+            position += 2;
+            continue;
+        }
+
+        // Real instructions
         int opcode_i = getOpcodeIndex(parsed_string[i].arg[0]);
         int bytes[16] = {0};
             
@@ -284,9 +326,12 @@ int main(int argc, char *argv[]) {
                     hexToBin(stringToHex(parsed_string[i].arg[3]), adress);
                     for (int j = 0; j < 8; j++)
                         bytes[j+8] = adress[j];
-                }
-                if (strcmp(parsed_string[i].arg[2], "D") == 0)
+                } else if (strcmp(parsed_string[i].arg[2], "D") == 0)
                     bytes[5] = 1;
+                else {
+                    printf("\nError, adressing mode (IM/D) is missing at some LD instruction\n");
+                    exit(1);
+                }
             }
 
             // ST
@@ -298,7 +343,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        printf("Instruction at 0x%x: ", position);
+        printf("Instruction at 0x%02x: ", position);
         for (int j = 0; j < 16; j++) {
             printf("%d", bytes[j]);
         }
@@ -310,9 +355,14 @@ int main(int argc, char *argv[]) {
         }        
         position += 2;
     }
+    printf("\n");
 
     // Write out to files
     for (int i = 0; i < 256; i += 2) {
+        if (i % 16 == 0) {
+            fprintf(memory_file, "// 0x%08x\n", i);
+            fprintf(bin_memory_file, "// 0x%08x\n", i);
+        }
         char hex_buffer[5];
         sprintf(hex_buffer, "%04x", RAM[i]);
         //printf("%s\n", hex_buffer);
@@ -330,5 +380,7 @@ int main(int argc, char *argv[]) {
     fclose(bin_memory_file);
     
     printf("RAM.mem and BIN_RAM.mem were created.\n");
+    if (!has_hlt)
+        printf("Warning, the program does not have a HLT instruction\n");
     return 0;
 }

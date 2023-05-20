@@ -1,39 +1,46 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Fri May 19 22:19:53 2023
+[*] Sat May 20 06:12:43 2023
 [*]
 [dumpfile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/dump.vcd"
-[dumpfile_mtime] "Fri May 19 22:17:18 2023"
-[dumpfile_size] 19611
+[dumpfile_mtime] "Sat May 20 05:42:17 2023"
+[dumpfile_size] 38172
 [savefile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/debug.gtkw"
 [timestart] 0
-[size] 1558 840
-[pos] -59 22
-*-13.000000 28500 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1200 833
+[pos] 777 81
+*-13.808781 19010 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] control_unit.
 [treeopen] control_unit.alu_sys.
 [treeopen] control_unit.alu_sys._ARF.
+[treeopen] control_unit.alu_sys._IR.
 [treeopen] control_unit.alu_sys._RF.
-[sst_width] 267
-[signals_width] 150
-[sst_expanded] 1
-[sst_vpaned_height] 453
-@22
-control_unit.alu_sys._IR.ir_out[15:0]
-@28
-control_unit.clk
-@22
-control_unit.alu_sys._RF.R1.data[7:0]
-control_unit.alu_sys._RF.R2.data[7:0]
+[sst_width] 57
+[signals_width] 190
+[sst_expanded] 0
+[sst_vpaned_height] 217
+@2028
+^1 /home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/instruction_map.gtkw
+control_unit.K[15:0]
 @28
 control_unit.I
 @22
-control_unit.alu_sys._ARF.AR.data[7:0]
-@28
-control_unit.alu_sys._MEMORY.cs
++{R1} control_unit.alu_sys._RF.R1.data[7:0]
++{R2} control_unit.alu_sys._RF.R2.data[7:0]
++{R3} control_unit.alu_sys._RF.R3.data[7:0]
++{R4} control_unit.alu_sys._RF.R4.data[7:0]
++{AR} control_unit.alu_sys._ARF.AR.data[7:0]
++{PC} control_unit.alu_sys._ARF.PC.data[7:0]
+@23
++{SP} control_unit.alu_sys._ARF.SP.data[7:0]
 @22
-control_unit.alu_sys._MEMORY.data[7:0]
-@29
-control_unit.alu_sys._MEMORY.wr
++{Time} control_unit.s_counter.data[2:0]
+control_unit.alu_sys.MEM_address[7:0]
+control_unit.alu_sys.MEM_data[7:0]
+control_unit.alu_sys.MEM_out[7:0]
+@28
+control_unit.alu_sys.Mem_CS
+control_unit.alu_sys.Mem_WR
+control_unit.alu_sys.Clock
 [pattern_trace] 1
 [pattern_trace] 0
