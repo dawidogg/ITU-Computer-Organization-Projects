@@ -52,6 +52,8 @@ module control_unit;
 
   reg clk;
 
+  wire[3:0] ALU_ZCNO;
+  
   ALU_System alu_sys(
     MuxASel,
     MuxBSel,
@@ -72,6 +74,7 @@ module control_unit;
     Mem_WR,
     Mem_CS,
     clk,
+    ALU_ZCNO
   );
 
   reg[1:0] s_counter_funsel;
@@ -562,23 +565,170 @@ module control_unit;
 
     // INC
     if (T[3] && K[7]) begin
-    
+        
+        // <-  SREG1 + 1
+  
+        // If R1, R2, R3 or R4
+        if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3]) begin
+          MuxCSel = 1'b0;
+          RF_FunSel = 2'b11;
+        end
+        if (d_sreg1[0]) RF_OutASel = 3'b100;
+        if (d_sreg1[1]) RF_OutASel = 3'b101;
+        if (d_sreg1[2]) RF_OutASel = 3'b110;
+        if (d_sreg1[3]) RF_OutASel = 3'b111;
+        
+        // If SP, AR, PC, PC
+        if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) begin
+          MuxCSel = 1'b1;
+          ARF_FunSel = 2'b11;
+        end
+        if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+        if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+        if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+        if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+        
     end  
 
+    if (T[4] && K[7]) begin
+        MuxASel = 2'b00; // Select ALU
+        MuxBSel = 2'b00; // Select ALU
+        
+        // DSTREG <-
+    
+        // If R1, R2, R3 or R4
+        if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+          RF_FunSel = 2'b01;
+          RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+        end
+        
+        // If SP, AR, PC, PC
+        if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+          ARF_FunSel = 2'b01;
+          ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+        end
+        
+        Mem_CS = 1; // disable memory
+        s_counter_funsel = 2'b00; // reset counter
+        IR_Enable = 0;
+        
+    end
+    
     // DEC
     if (T[3] && K[8]) begin
+            
+        // <-  SREG1 - 1
     
+        // If R1, R2, R3 or R4
+        if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3]) begin
+          MuxCSel = 1'b0;
+          RF_FunSel = 2'b10;
+        end
+        if (d_sreg1[0]) RF_OutASel = 3'b100;
+        if (d_sreg1[1]) RF_OutASel = 3'b101;
+        if (d_sreg1[2]) RF_OutASel = 3'b110;
+        if (d_sreg1[3]) RF_OutASel = 3'b111;
+        
+        // If SP, AR, PC, PC
+        if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) begin
+          MuxCSel = 1'b1;
+          ARF_FunSel = 2'b10;
+        end
+        if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
+        if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
+        if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
+        if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
     end  
+    
+    if(T[4] && K[8]) begin
+        MuxASel = 2'b00; // Select ALU
+        MuxBSel = 2'b00; // Select ALU
+        
+        // DSTREG <-
+    
+        // If R1, R2, R3 or R4
+        if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
+          RF_FunSel = 2'b01;
+          RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+        end
+        
+        // If SP, AR, PC, PC
+        if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
+          ARF_FunSel = 2'b01;
+          ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+        end
+        
+        Mem_CS = 1; // disable memory
+        s_counter_funsel = 2'b00; // reset counter
+        IR_Enable = 0;
+    end
 
     // BRA
     if (T[3] && K[9]) begin
+
+        // <- M[AR]
+        
+        Mem_CS = 0; // enable memory
+        Mem_WR = 0; // read
+        ARF_OutBSel = 2'b00; //AR
+        MuxBSel = 2'b00; // Select MEM_OUT
+        
+        ARF_RSel = 4'b0100; // AR
+        ARF_FunSel = 2'b01; //Load
+        
     
-    end  
+    end
+    
+    if (T[4] && K[9]) begin
+    
+        Mem_CS = 0; // enable memory
+        Mem_WR = 0; // read
+        ARF_OutBSel = 2'b00; //AR
+        MuxBSel = 2'b00; // Select MEM_OUT
+        
+        ARF_RSel = 4'b1000; // PC
+        ARF_FunSel = 2'b01; //Load
+        
+        Mem_CS = 1; // disable memory
+        s_counter_funsel = 2'b00; // reset counter
+        IR_Enable = 0;
+
+
+    end
 
     // BNE
     if (T[3] && K[10]) begin
     
-    end  
+        if(!ALU_ZCNO[0]) begin //if Z == 0
+            Mem_CS = 0; // enable memory
+            Mem_WR = 0; // read
+            ARF_OutBSel = 2'b00; //AR
+            MuxBSel = 2'b00; // Select MEM_OUT
+            
+            ARF_RSel = 4'b0100; // AR
+            ARF_FunSel = 2'b01; //Load
+        end
+        
+        if(ALU_ZCNO[0]) begin // if condition is not 0, finish instruction
+            Mem_CS = 1; // disable memory
+            s_counter_funsel = 2'b00; // reset counter
+            IR_Enable = 0;
+        end
+    end
+    
+    if (T[4] && K[10]) begin
+        Mem_CS = 0; // enable memory
+        Mem_WR = 0; // read
+        ARF_OutBSel = 2'b00; //AR
+        MuxBSel = 2'b00; // Select MEM_OUT
+        
+        ARF_RSel = 4'b1000; // PC
+        ARF_FunSel = 2'b01; //Load
+        
+        Mem_CS = 1; // disable memory
+        s_counter_funsel = 2'b00; // reset counter
+        IR_Enable = 0;
+    end
 
     // MOV
     if (T[3] && K[11]) begin
