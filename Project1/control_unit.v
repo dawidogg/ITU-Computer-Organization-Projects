@@ -590,6 +590,9 @@ module control_unit;
         if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
         if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
         
+        Mem_CS = 1; // disable memory
+        IR_Enable = 0;
+        
     end  
 
     if (T[4] && K[7]) begin
@@ -603,12 +606,14 @@ module control_unit;
         if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
           RF_FunSel = 2'b01;
           RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+          ARF_RSel = 4'b0;
         end
         
         // If SP, AR, PC, PC
         if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
           ARF_FunSel = 2'b01;
           ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+          RF_RSel = 4'b0;
         end
         
         Mem_CS = 1; // disable memory
@@ -643,6 +648,10 @@ module control_unit;
         if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
         if (d_sreg1[6]) ARF_OutASel = 2'b11; // PC
         if (d_sreg1[7]) ARF_OutASel = 2'b11; // PC
+        
+        Mem_CS = 1; // disable memory
+        IR_Enable = 0;
+        
     end  
     
     if(T[4] && K[8]) begin
@@ -656,84 +665,57 @@ module control_unit;
         if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
           RF_FunSel = 2'b01;
           RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
+          ARF_RSel = 4'b0;
         end
         
         // If SP, AR, PC, PC
         if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
           ARF_FunSel = 2'b01;
           ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
+          RF_RSel = 4'b0;
         end
         
         Mem_CS = 1; // disable memory
         s_counter_funsel = 2'b00; // reset counter
         IR_Enable = 0;
     end
+//💀
 
     // BRA
     if (T[3] && K[9]) begin
-        // Immediate Address
-        Mem_CS = 0; // enable memory
-        Mem_WR = 0; // read
-        ARF_OutBSel = 2'b00; //AR
-        MuxBSel = 2'b00; // Select MEM_OUT
+        RF_RSel = 4'b0000;
         
-        ARF_RSel = 4'b0100; // AR
+        MuxBSel = 2'b10;
+        ARF_RSel = 4'b0001; // PC
         ARF_FunSel = 2'b01; //Load
-        
     
-    end
-    
-    if (T[4] && K[9]) begin
-        // Direct Address
-        Mem_CS = 0; // enable memory
-        Mem_WR = 0; // read
-        ARF_OutBSel = 2'b00; //AR
-        MuxBSel = 2'b00; // Select MEM_OUT
-        
-        ARF_RSel = 4'b1000; // PC
-        ARF_FunSel = 2'b01; //Load
         
         Mem_CS = 1; // disable memory
         s_counter_funsel = 2'b00; // reset counter
         IR_Enable = 0;
-
-
     end
 
     // BNE
     if (T[3] && K[10]) begin
      
-        if(!ALU_ZCNO[0]) begin //if Z == 0
-            // Immediate Address
-            Mem_CS = 0; // enable memory
-            Mem_WR = 0; // read
-            ARF_OutBSel = 2'b00; //AR
-            MuxBSel = 2'b00; // Select MEM_OUT
+        if(!ALU_ZCNO[3]) begin //if Z == 0
+            RF_RSel = 4'b0000;
             
-            ARF_RSel = 4'b0100; // AR
+            MuxBSel = 2'b10;
+            ARF_RSel = 4'b0001; // PC
             ARF_FunSel = 2'b01; //Load
-        end
         
-        if(ALU_ZCNO[0]) begin // if condition is not 0, finish instruction
+            
             Mem_CS = 1; // disable memory
             s_counter_funsel = 2'b00; // reset counter
             IR_Enable = 0;
         end
-    end
-    
-    if (T[4] && K[10]) begin
-        // Direct Address
-        Mem_CS = 0; // enable memory
-        Mem_WR = 0; // read
-        ARF_OutBSel = 2'b00; //AR
-        MuxBSel = 2'b00; // Select MEM_OUT
         
-        ARF_RSel = 4'b1000; // PC
-        ARF_FunSel = 2'b01; //Load
-        
-        Mem_CS = 1; // disable memory
-        s_counter_funsel = 2'b00; // reset counter
-        IR_Enable = 0;
+        if(ALU_ZCNO[3]) begin // if condition is not 0, finish instruction
+            Mem_CS = 1; // disable memory
+            s_counter_funsel = 2'b00; // reset counter
+            IR_Enable = 0;
+        end
     end
 
     // MOV

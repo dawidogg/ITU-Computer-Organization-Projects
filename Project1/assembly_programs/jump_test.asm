@@ -1,0 +1,9 @@
+ORG 0x0
+BRA 0x20
+
+ORG 0x20
+LD R1 IM 0xfa
+LD R2 IM 0x1
+LOOP:   ADD R1 R1 R2
+        BNE LOOP
+HLT

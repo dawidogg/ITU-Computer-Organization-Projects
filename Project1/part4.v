@@ -60,9 +60,7 @@ module ALU_System(
     //clock
     input      Clock,
     //output 
-    output[3:0] ALU_ZCNO,
-    output[7:0] out // IROut 15-8, but it is probably not needed
-    
+    output[3:0] ALU_ZCNO
 );
 
 // i think its better to use assign and use original names for every part
