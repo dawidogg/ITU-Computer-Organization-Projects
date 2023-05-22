@@ -60,7 +60,9 @@ module ALU_System(
     //clock
     input      Clock,
     //output 
+    output[3:0] ALU_ZCNO,
     output[7:0] out // IROut 15-8, but it is probably not needed
+    
 );
 
 // i think its better to use assign and use original names for every part
@@ -82,7 +84,7 @@ wire[7:0] MUXC_out;
 wire[7:0] ALU_A;
 wire[7:0] ALU_B;
 wire[7:0] OutALU;
-wire[3:0] ALU_ZCNO;
+//wire[3:0] ALU_ZCNO;
 //MUXB
 wire[7:0] B_I0;
 wire[7:0] B_I1;
@@ -101,7 +103,7 @@ wire[7:0] MEM_out;
 wire[7:0] IR_i;
 wire[7:0] IR_out_low;
 wire[7:0] IR_out_high; // this may not be used.
-output wire[15:0] IR_out;
+wire[15:0] IR_out;
 //out
 //just a placeholder
 //wire[7:0] out;
