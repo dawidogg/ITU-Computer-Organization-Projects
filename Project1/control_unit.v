@@ -665,9 +665,7 @@ module control_unit;
 
     // BRA
     if (T[3] && K[9]) begin
-
-        // <- M[AR]
-        
+        // Immediate Address
         Mem_CS = 0; // enable memory
         Mem_WR = 0; // read
         ARF_OutBSel = 2'b00; //AR
@@ -680,7 +678,7 @@ module control_unit;
     end
     
     if (T[4] && K[9]) begin
-    
+        // Direct Address
         Mem_CS = 0; // enable memory
         Mem_WR = 0; // read
         ARF_OutBSel = 2'b00; //AR
@@ -698,8 +696,9 @@ module control_unit;
 
     // BNE
     if (T[3] && K[10]) begin
-    
+     
         if(!ALU_ZCNO[0]) begin //if Z == 0
+            // Immediate Address
             Mem_CS = 0; // enable memory
             Mem_WR = 0; // read
             ARF_OutBSel = 2'b00; //AR
@@ -717,6 +716,7 @@ module control_unit;
     end
     
     if (T[4] && K[10]) begin
+        // Direct Address
         Mem_CS = 0; // enable memory
         Mem_WR = 0; // read
         ARF_OutBSel = 2'b00; //AR
