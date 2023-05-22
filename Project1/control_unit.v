@@ -572,6 +572,7 @@ module control_unit;
         if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3]) begin
           MuxCSel = 1'b0;
           RF_FunSel = 2'b11;
+          RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
         end
         if (d_sreg1[0]) RF_OutASel = 3'b100;
         if (d_sreg1[1]) RF_OutASel = 3'b101;
@@ -582,6 +583,7 @@ module control_unit;
         if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) begin
           MuxCSel = 1'b1;
           ARF_FunSel = 2'b11;
+          ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
         end
         if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
         if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
@@ -593,6 +595,7 @@ module control_unit;
     if (T[4] && K[7]) begin
         MuxASel = 2'b00; // Select ALU
         MuxBSel = 2'b00; // Select ALU
+        ALU_FunSel = 4'b0000;
         
         // DSTREG <-
     
@@ -623,6 +626,7 @@ module control_unit;
         if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3]) begin
           MuxCSel = 1'b0;
           RF_FunSel = 2'b10;
+          RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
         end
         if (d_sreg1[0]) RF_OutASel = 3'b100;
         if (d_sreg1[1]) RF_OutASel = 3'b101;
@@ -633,6 +637,7 @@ module control_unit;
         if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) begin
           MuxCSel = 1'b1;
           ARF_FunSel = 2'b10;
+          ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
         end
         if (d_sreg1[4]) ARF_OutASel = 2'b01; // SP
         if (d_sreg1[5]) ARF_OutASel = 2'b00; // AR
@@ -643,6 +648,7 @@ module control_unit;
     if(T[4] && K[8]) begin
         MuxASel = 2'b00; // Select ALU
         MuxBSel = 2'b00; // Select ALU
+        ALU_FunSel = 4'b0000;
         
         // DSTREG <-
     
