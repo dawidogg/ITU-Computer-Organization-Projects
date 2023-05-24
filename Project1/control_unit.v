@@ -599,14 +599,14 @@ module control_unit;
         // <-  DSTREG + 1
 
         // If R1, R2, R3 or R4
-        if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3]) begin
+        if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
           RF_FunSel = 2'b11;
           RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
           ARF_RSel = 4'b0;
         end
 
         // If SP, AR, PC, PC
-        if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) begin
+        if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
           ARF_FunSel = 2'b11;
           ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
           RF_RSel = 4'b0;
@@ -662,14 +662,14 @@ module control_unit;
         // <-  DSTREG - 1
 
         // If R1, R2, R3 or R4
-        if (d_sreg1[0] || d_sreg1[1] || d_sreg1[2] || d_sreg1[3]) begin
+        if (d_dstreg[0] || d_dstreg[1] || d_dstreg[2] || d_dstreg[3]) begin
           RF_FunSel = 2'b10;
           RF_RSel = {d_dstreg[0], d_dstreg[1], d_dstreg[2], d_dstreg[3]};
           ARF_RSel = 4'b0;
         end
     
         // If SP, AR, PC, PC
-        if (d_sreg1[4] || d_sreg1[5] || d_sreg1[6] || d_sreg1[7]) begin
+        if (d_dstreg[4] || d_dstreg[5] || d_dstreg[6] || d_dstreg[7]) begin
           ARF_FunSel = 2'b10;
           ARF_RSel = {d_dstreg[5], d_dstreg[4], d_dstreg[6], d_dstreg[7]};
           RF_RSel = 4'b0;
