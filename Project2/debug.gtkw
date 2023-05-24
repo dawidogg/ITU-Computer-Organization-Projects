@@ -1,0 +1,38 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Wed May 24 17:25:14 2023
+[*]
+[dumpfile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/dump.vcd"
+[dumpfile_mtime] "Wed May 24 17:25:03 2023"
+[dumpfile_size] 3833299
+[savefile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/debug.gtkw"
+[timestart] 0
+[size] 1213 747
+[pos] 347 258
+*-15.808781 37000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] Project2Test.
+[treeopen] Project2Test._CPUSystem.
+[sst_width] 57
+[signals_width] 160
+[sst_expanded] 0
+[sst_vpaned_height] 217
+@2028
+^1 /home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/instruction_map.gtkw
++{Instruction} Project2Test._CPUSystem.K[15:0]
+@22
++{R1} Project2Test._CPUSystem.alu_sys._RF.R1.data[7:0]
++{R2} Project2Test._CPUSystem.alu_sys._RF.R2.data[7:0]
++{R3} Project2Test._CPUSystem.alu_sys._RF.R3.data[7:0]
++{R4} Project2Test._CPUSystem.alu_sys._RF.R4.data[7:0]
++{AR} Project2Test._CPUSystem.alu_sys._ARF.AR.data[7:0]
++{PC} Project2Test._CPUSystem.alu_sys._ARF.PC.data[7:0]
++{SP} Project2Test._CPUSystem.alu_sys._ARF.SP.data[7:0]
++{Time} Project2Test._CPUSystem.s_counter.data[2:0]
+Project2Test._CPUSystem.alu_sys.MEM_data[7:0]
+Project2Test._CPUSystem.alu_sys.MEM_out[7:0]
+@28
+Project2Test._CPUSystem.alu_sys.Clock
+@29
+Project2Test.Reset
+[pattern_trace] 1
+[pattern_trace] 0

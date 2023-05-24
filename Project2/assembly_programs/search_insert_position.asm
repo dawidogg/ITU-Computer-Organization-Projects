@@ -65,7 +65,7 @@ EXIT:   LD R1 IM ARRAY
         HLT
         
         ORG 0xD0
-TARGET: 0xFF
+TARGET: 0x59
 ARRAY:  0x13    
         0x15
         0x3A

@@ -1,7 +1,0 @@
-./assembler ./assembly_programs/$1
-iverilog control_unit.v part4.v part3.v part2c.v part2b.v part2a.v part1.v Memory.v
-./a.out
-if [ "$2" = "--wave" ]; then
-    gtkwave dump.vcd debug.gtkw
-fi
-diff -u RAM.mem RAM_OUT.mem | colordiff
