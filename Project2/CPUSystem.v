@@ -515,7 +515,6 @@ module Memory(
         $display("%x", RAM_DATA[i]);
         // #1;
       end
-      $finish;
     end
 endmodule
 
@@ -679,6 +678,8 @@ module CPUSystem(input Clock, input Reset);
       ARF_RSel = 4'b0000;
       if (alu_sys.IR_out == 16'hffff) begin
         dump = 1;
+        #1;
+        $finish;
       end
     end
 
