@@ -489,11 +489,12 @@ module Memory(
     output reg[7:0] o // Output
 );
     //Declaration o�f the RAM Area
-    output reg[7:0] RAM_DATA[0:255];
+    reg[7:0] RAM_DATA[0:255];
     //Read Ram data from the file
     initial $readmemh("RAM.mem", RAM_DATA);
     //Read the selected data from RAM
     always @(*) begin
+        $writememh("RAM_OUT.mem",RAM_DATA);
         o = ~wr && ~cs ? RAM_DATA[address] : 8'hZ;
     end
     
@@ -662,7 +663,7 @@ module CPUSystem(input Clock, input Reset);
       IR_Enable = 0;
       ARF_RSel = 4'b0000;
       if (alu_sys.IR_out == 16'hffff) begin
-        $writememh("RAM_OUT.mem", alu_sys._MEMORY.RAM_DATA);
+       
         $finish;
       end
     end
