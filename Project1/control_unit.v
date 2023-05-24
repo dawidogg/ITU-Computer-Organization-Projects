@@ -156,18 +156,11 @@ module control_unit;
     end
 
     if (T[2]) begin
-      // direct adressing
-      // AR <- IR(8-15)
-      if (!I) begin
-        MuxBSel = 2'b10;
-        ARF_FunSel = 2'b01;
-        ARF_RSel = 4'b1000;
-      end else ARF_RSel = 4'b0000;
-
       Mem_WR = 0; // disable memory
       s_counter_funsel = 2'b11;
       RF_RSel = 4'b0000;
       IR_Enable = 0;
+      ARF_RSel = 4'b0000;
       if (alu_sys.IR_out == 16'hffff) begin
         $writememh("RAM_OUT.mem", alu_sys._MEMORY.RAM_DATA);
         $finish;
@@ -769,9 +762,8 @@ module control_unit;
       
       if (I == 0) begin
         // Immediate address
-        // <- AR
-        MuxASel = 2'b11;
-        ARF_OutASel = 2'b00;
+        // <- IR(0-7)
+        MuxASel = 2'b10;
       end
 
       if (I == 1) begin

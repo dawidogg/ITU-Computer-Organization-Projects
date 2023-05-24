@@ -1,29 +1,27 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon May 22 21:20:28 2023
+[*] Tue May 23 20:23:26 2023
 [*]
 [dumpfile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/dump.vcd"
-[dumpfile_mtime] "Mon May 22 21:19:09 2023"
-[dumpfile_size] 7213056
+[dumpfile_mtime] "Tue May 23 20:20:58 2023"
+[dumpfile_size] 130401
 [savefile] "/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/debug.gtkw"
-[timestart] 0
-[size] 1200 833
-[pos] 777 81
-*-13.808781 19010 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 446750
+[size] 1024 747
+[pos] 551 120
+*-13.808781 500920 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] control_unit.
 [treeopen] control_unit.alu_sys.
 [treeopen] control_unit.alu_sys._ARF.
 [treeopen] control_unit.alu_sys._IR.
 [treeopen] control_unit.alu_sys._RF.
-[sst_width] 267
-[signals_width] 190
-[sst_expanded] 1
+[sst_width] 57
+[signals_width] 160
+[sst_expanded] 0
 [sst_vpaned_height] 217
 @2028
 ^1 /home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/instruction_map.gtkw
-control_unit.K[15:0]
-@28
-control_unit.I
++{Instruction} control_unit.K[15:0]
 @22
 +{R1} control_unit.alu_sys._RF.R1.data[7:0]
 +{R2} control_unit.alu_sys._RF.R2.data[7:0]
@@ -33,14 +31,9 @@ control_unit.I
 +{PC} control_unit.alu_sys._ARF.PC.data[7:0]
 +{SP} control_unit.alu_sys._ARF.SP.data[7:0]
 +{Time} control_unit.s_counter.data[2:0]
-control_unit.alu_sys.MEM_address[7:0]
 control_unit.alu_sys.MEM_data[7:0]
 control_unit.alu_sys.MEM_out[7:0]
 @28
-control_unit.alu_sys.Mem_CS
-control_unit.alu_sys.Mem_WR
 control_unit.alu_sys.Clock
-@29
-control_unit.alu_sys._ALU.ZCNO[3:0]
 [pattern_trace] 1
 [pattern_trace] 0
