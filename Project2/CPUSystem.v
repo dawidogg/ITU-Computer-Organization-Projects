@@ -323,7 +323,8 @@ module ALU_System(
     //clock
     input      Clock,
     //output 
-    output[3:0] ALU_ZCNO
+    output[3:0] ALU_ZCNO,
+    input dump
 );
 
 // i think its better to use assign and use original names for every part
@@ -466,7 +467,8 @@ Memory _MEMORY(
     .wr(Mem_WR),
     .cs(Mem_CS),
     .o(MEM_out),
-    .clock(Clock)
+    .clock(Clock),
+    .dump(dump)
 );
 
 IR_16_bit _IR(
@@ -486,10 +488,12 @@ module Memory(
     input wire wr, //Read = 0, Write = 1
     input wire cs, //Chip is enable when cs = 0
     input wire clock,
-    output reg[7:0] o // Output
+    output reg[7:0] o, // Output
+    input dump
 );
     //Declaration o�f the RAM Area
     reg[7:0] RAM_DATA[0:255];
+    reg[7:0] i;
     //Read Ram data from the file
     initial $readmemh("RAM.mem", RAM_DATA);
     //Read the selected data from RAM
@@ -503,6 +507,15 @@ module Memory(
         if (wr && ~cs) begin
             RAM_DATA[address] <= data; 
         end
+    end
+
+    always @(posedge dump) begin
+      for (i = 8'h0; i < 8'hff; i = i + 1) begin
+        if (i % 16 == 0) $display("// Address: 0x%x", i);
+        $display("%x", RAM_DATA[i]);
+        // #1;
+      end
+      $finish;
     end
 endmodule
 
@@ -554,7 +567,7 @@ module CPUSystem(input Clock, input Reset);
   //MEM
   reg      Mem_WR;
   reg      Mem_CS;
-
+  reg dump;
   wire[3:0] ALU_ZCNO;
   
   ALU_System alu_sys(
@@ -577,7 +590,8 @@ module CPUSystem(input Clock, input Reset);
     Mem_WR,
     Mem_CS,
     Clock,
-    ALU_ZCNO
+    ALU_ZCNO,
+    dump
   );
 
   reg[1:0] s_counter_funsel;
@@ -611,6 +625,7 @@ module CPUSystem(input Clock, input Reset);
 
   initial begin
     $dumpvars;
+    dump = 0;
     s_counter_funsel = 2'b11;
   end
   always @(*) begin
@@ -663,8 +678,7 @@ module CPUSystem(input Clock, input Reset);
       IR_Enable = 0;
       ARF_RSel = 4'b0000;
       if (alu_sys.IR_out == 16'hffff) begin
-       
-        $finish;
+        dump = 1;
       end
     end
 
