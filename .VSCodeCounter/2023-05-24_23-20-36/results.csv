@@ -1,0 +1,28 @@
+"filename", "language", "C", "Verilog", "Assembly", "Markdown", "comment", "blank", "total"
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/Memory.v", "Verilog", 0, 20, 0, 0, 23, 4, 47
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/Memory_tb.v", "Verilog", 0, 32, 0, 0, 0, 3, 35
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part1.v", "Verilog", 0, 22, 0, 0, 0, 7, 29
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part1_tb.v", "Verilog", 0, 52, 0, 0, 0, 12, 64
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part2a.v", "Verilog", 0, 30, 0, 0, 0, 6, 36
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part2a_tb.v", "Verilog", 0, 68, 0, 0, 0, 13, 81
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part2b.v", "Verilog", 0, 41, 0, 0, 1, 5, 47
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part2b_tb.v", "Verilog", 0, 41, 0, 0, 8, 14, 63
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part2c.v", "Verilog", 0, 40, 0, 0, 0, 7, 47
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part2c_tb.v", "Verilog", 0, 97, 0, 0, 0, 20, 117
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part3.v", "Verilog", 0, 105, 0, 0, 1, 7, 113
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part3_tb.v", "Verilog", 0, 45, 0, 0, 4, 10, 59
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part4.v", "Verilog", 0, 166, 0, 0, 34, 19, 219
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project1/part4_tb.v", "Verilog", 0, 94, 0, 0, 10, 10, 114
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/CPUSystem.v", "Verilog", 0, 1041, 0, 0, 149, 195, 1385
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/TestBench_Project2.v", "Verilog", 0, 15, 0, 0, 0, 2, 17
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/addition.asm", "Assembly", 0, 0, 32, 0, 0, 5, 37
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/arithmetic_test.asm", "Assembly", 0, 0, 48, 0, 0, 12, 60
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/assignment.asm", "Assembly", 0, 0, 23, 0, 0, 2, 25
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/inc_dec_test.asm", "Assembly", 0, 0, 14, 0, 0, 2, 16
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/jump_test.asm", "Assembly", 0, 0, 8, 0, 0, 1, 9
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/search_insert_position.asm", "Assembly", 0, 0, 72, 0, 0, 6, 78
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/stack_test.asm", "Assembly", 0, 0, 48, 0, 0, 1, 49
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/Project2/assembly_programs/swap.asm", "Assembly", 0, 0, 24, 0, 0, 1, 25
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/README.md", "Markdown", 0, 0, 0, 11, 0, 4, 15
+"/home/dawidogg/Documents/storageD/ITU/4thsemester/Computer Organization/Projects/assembler/assembler.c", "C", 330, 0, 0, 0, 20, 37, 387
+"Total", "-", 330, 1909, 269, 11, 250, 405, 3174

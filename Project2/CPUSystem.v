@@ -515,6 +515,7 @@ module Memory(
         $display("%x", RAM_DATA[i]);
         // #1;
       end
+      $display();
     end
 endmodule
 
@@ -566,9 +567,17 @@ module CPUSystem(input Clock, input Reset);
   //MEM
   reg      Mem_WR;
   reg      Mem_CS;
-  reg dump;
+  
   wire[3:0] ALU_ZCNO;
   
+  reg dump_input;
+  register #(.NBits(1)) dump_reg (
+    .clk(Clock), 
+    .funsel(2'b01),
+    .e(1'b1),
+    .i(dump_input)
+  );
+
   ALU_System alu_sys(
     MuxASel,
     MuxBSel,
@@ -590,7 +599,7 @@ module CPUSystem(input Clock, input Reset);
     Mem_CS,
     Clock,
     ALU_ZCNO,
-    dump
+    dump_reg.q
   );
 
   reg[1:0] s_counter_funsel;
@@ -599,6 +608,7 @@ module CPUSystem(input Clock, input Reset);
     .funsel(s_counter_funsel),
     .e(1'b1)
   );
+
 
   // Time
   wire[15:0] T;
@@ -624,7 +634,6 @@ module CPUSystem(input Clock, input Reset);
 
   initial begin
     $dumpvars;
-    dump = 0;
     s_counter_funsel = 2'b11;
   end
   always @(*) begin
@@ -637,6 +646,7 @@ module CPUSystem(input Clock, input Reset);
     // Fetch cycle (T0, T1, T2)
 
     if (T[0]) begin
+      dump_input = 1'b0;
       // IR(0-7) <-
       IR_Enable = 1;
       IR_Funsel = 2'b01;
@@ -677,8 +687,6 @@ module CPUSystem(input Clock, input Reset);
       IR_Enable = 0;
       ARF_RSel = 4'b0000;
       if (alu_sys.IR_out == 16'hffff) begin
-        dump = 1;
-        #1;
         $finish;
       end
     end
@@ -1320,6 +1328,7 @@ module CPUSystem(input Clock, input Reset);
       s_counter_funsel = 2'b00; // reset counter
       IR_Enable = 0;
       ARF_RSel = 4'b0000;
+      dump_input = 1'b1;
     end  
 
     // PUL
