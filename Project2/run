@@ -1,6 +1,6 @@
 ./assembler ./assembly_programs/$1 > assembler_dump.txt
 iverilog CPUSystem.v TestBench_Project2.v -o cpu_system
-./cpu_system
+./cpu_system > cpu_system_dump.txt
 if [[ "$2" = "--wave" || "$2" = "-w" ]]; then
     gtkwave dump.vcd debug.gtkw
 fi

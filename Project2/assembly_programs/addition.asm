@@ -19,7 +19,7 @@ ADDITION:   LD R1 IM VALUE_A
             BRA INCREMENT 
             
             
-VALUE_A:    0x02
+VALUE_A:    0x10
 VALUE_B:    0x05
 RESULT:     0x00
 
